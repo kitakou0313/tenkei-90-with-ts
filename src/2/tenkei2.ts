@@ -5,11 +5,30 @@ function generateSortedValidParentheseStrList(numOfParenthesePair: number): stri
     
     const sortedValidParentheseStrListN_1 = generateSortedValidParentheseStrList(numOfParenthesePair - 1)
     const res: string[] = []
+    const addedParentheseStrSet: Set<string> = new Set([])
     for (const validParethese of sortedValidParentheseStrListN_1) {
+        const validParetheseCandidate = "(" + validParethese + ")"
+        if (addedParentheseStrSet.has(validParetheseCandidate)) {
+            continue
+        }
         res.push("(" + validParethese + ")")
+        addedParentheseStrSet.add(validParetheseCandidate)
     }
     for (const validParethese of sortedValidParentheseStrListN_1) {
+        const validParetheseCandidate = "()" + validParethese 
+        if (addedParentheseStrSet.has(validParetheseCandidate)) {
+            continue
+        }
         res.push("()" + validParethese)
+        addedParentheseStrSet.add(validParetheseCandidate)
+    }
+    for (const validParethese of sortedValidParentheseStrListN_1) {
+        const validParetheseCandidate = validParethese + "()"
+        if (addedParentheseStrSet.has(validParetheseCandidate)) {
+            continue
+        }
+        res.push(validParethese + "()")
+        addedParentheseStrSet.add(validParetheseCandidate)
     }
 
     return res
@@ -23,8 +42,9 @@ function solve2(input: string[]) {
     }
     const numOfParenthesePair = N / 2
     const validParetheseStrList = generateSortedValidParentheseStrList(numOfParenthesePair)
+    const sortedValidParetheseStrList = validParetheseStrList.sort()
     
-    for (const paretheseStr of validParetheseStrList) {
+    for (const paretheseStr of sortedValidParetheseStrList) {
         console.log(paretheseStr)
     }
     return
