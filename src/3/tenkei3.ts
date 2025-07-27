@@ -4,7 +4,7 @@ function solve3(input3: string[]) {
     const paths: number[][] = []
     for (const line of input3.slice(1)) {
         paths.push(
-            line.split(' ').map(Number)
+            line.split(' ').map((char) => {return parseInt(char, 10)})
         )
     }
     console.log(paths)
