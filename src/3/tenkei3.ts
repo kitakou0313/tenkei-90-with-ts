@@ -45,27 +45,43 @@ function solve3(input3: string[]) {
             (char) => {return parseInt(char, 10)}
         )
         
-        graph[start].push(end)
+        graph[start-1].push(end-1)
+        graph[end-1].push(start-1)
     }
 
-    function calcDistanceListFromStartNode(startNode:number, N: number): number[] {
+    function calcDistanceListFromStartNode(startNode:number, N: number, graph: number[][]): number[] {
         const distancesList: number[] = Array.from(
-            {length: N}, (_, index) => {return 0}
+            {length: N}, (_, index) => {return -1}
         )
-        for (let index = 0; index < N; index++) {
-            
-            
-        }
+        const visitedNodeList = new Set<number>()
+        const stack = new Stack<number>([])
 
+        stack.push(startNode)
+        distancesList[startNode] = 0
+        visitedNodeList.add(startNode)
+
+        // type guardを入れる
+        while (!(stack.isEmpty())) {
+            const currentNode = stack.pop() as number
+
+            for (const nextNode of graph[currentNode]) {
+                if (visitedNodeList.has(nextNode)) {
+                    continue
+                }
+                distancesList[nextNode] = distancesList[currentNode] + 1
+                visitedNodeList.add(nextNode)
+                stack.push(nextNode)
+            }
+        }
         return distancesList
     }
 
-    const distanceListFrom0 = calcDistanceListFromStartNode(0)
+    const distanceListFrom0 = calcDistanceListFromStartNode(0, N, graph)
     const nodeMostSeparatedFrom0 = distanceListFrom0.indexOf(Math.max(...distanceListFrom0))
     const distanceListFromNodeMostSeparatedFrom0 = calcDistanceListFromStartNode(
-        nodeMostSeparatedFrom0
+        nodeMostSeparatedFrom0, N, graph
     )
-    return Math.max(...distanceListFromNodeMostSeparatedFrom0) + 1
+    console.log(Math.max(...distanceListFromNodeMostSeparatedFrom0) + 1)
 
 
 }
