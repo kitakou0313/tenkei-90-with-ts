@@ -61,9 +61,8 @@ function solve3(input3: string[]) {
         distancesList[startNode] = 0
 
         // type guardを入れる
-        while (!(stack.isEmpty())) {
-            const currentNode = stack.pop() as number
-
+        var currentNode: number | undefined
+        while (typeof (currentNode = stack.pop()) == "number") {
             for (const nextNode of graph[currentNode]) {
                 if (visitedNodeList.has(nextNode)) {
                     continue
