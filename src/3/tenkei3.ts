@@ -57,8 +57,8 @@ function solve3(input3: string[]) {
         const stack = new Stack<number>([])
 
         stack.push(startNode)
-        distancesList[startNode] = 0
         visitedNodeList.add(startNode)
+        distancesList[startNode] = 0
 
         // type guardを入れる
         while (!(stack.isEmpty())) {
@@ -68,9 +68,9 @@ function solve3(input3: string[]) {
                 if (visitedNodeList.has(nextNode)) {
                     continue
                 }
-                distancesList[nextNode] = distancesList[currentNode] + 1
-                visitedNodeList.add(nextNode)
                 stack.push(nextNode)
+                visitedNodeList.add(nextNode)
+                distancesList[nextNode] = distancesList[currentNode] + 1
             }
         }
         return distancesList
