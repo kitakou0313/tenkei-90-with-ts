@@ -25,8 +25,22 @@ function solve4(inputs:string[]) {
         sumOfColumn.push(sum)
     }
 
-    console.log(sumOfRows)
-    console.log(sumOfColumn)
+    const resMatrix: number[][] = []
+    for (let row = 0; row < H; row++) {
+        const resOfRow: number[] = []
+
+        for (let column = 0; column < W; column++) {
+            resOfRow.push(
+                sumOfRows[row] + sumOfColumn[column] - masu[row][column]
+            )
+        }
+
+        resMatrix.push(resOfRow)
+    }
+
+    for (let row = 0; row < H; row++) {
+        console.log(resMatrix[row].join(" "))
+    }
 }
 
 
