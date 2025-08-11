@@ -11,7 +11,7 @@ function solveSyoujin100_6(inputs:string[]) {
 
         const resOfCountSelectionOfDigitCreatingTrgLucyNumber = countSelectionOfDigitCreatingTrgLucyNumber(trgLuckNumberStr)
 
-        duplicateSelectioncount = resOfCountSelectionOfDigitCreatingTrgLucyNumber == 0 ? duplicateSelectioncount : duplicateSelectioncount + (resOfCountSelectionOfDigitCreatingTrgLucyNumber - 1) 
+        duplicateSelectioncount += resOfCountSelectionOfDigitCreatingTrgLucyNumber == 0 ? 0 : (resOfCountSelectionOfDigitCreatingTrgLucyNumber - 1) 
         
     }
 
