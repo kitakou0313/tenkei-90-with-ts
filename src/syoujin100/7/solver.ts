@@ -4,7 +4,12 @@ function solveSyoujin100_7(inputs:string[]) {
     const pillarCoordinatesList: [number, number][] = []
     for (let index = 1; index < inputs.length; index++) {
         const [X, Y] = inputs[index].split(" ").map((x) => {return parseInt(x, 10)})
-        pillarCoordinatesMap.set(X, new Map([[Y, true]]))
+
+        if (!pillarCoordinatesMap.has(X)) {
+            pillarCoordinatesMap.set(X, new Map())
+        } 
+        pillarCoordinatesMap.get(X)?.set(Y, true)
+
         pillarCoordinatesList.push(
             [X, Y]
         )
