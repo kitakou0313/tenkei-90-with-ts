@@ -1,7 +1,7 @@
 function solveSyoujin100_7(inputs:string[]) {
     const N = parseInt(inputs[0], 10)
     const pillarCoordinatesMap = new Map<number, Map<number, boolean>>()
-    const pillarCoordinatesList: number[][] = []
+    const pillarCoordinatesList: [number, number][] = []
     for (let index = 1; index < inputs.length; index++) {
         const [X, Y] = inputs[index].split(" ").map((x) => {return parseInt(x, 10)})
         pillarCoordinatesMap.set(X, new Map([[Y, true]]))
@@ -28,7 +28,7 @@ function solveSyoujin100_7(inputs:string[]) {
 
     console.log(sizeOfMostBiggestSquare)
 
-    function isExistSquareMadeWithPillarAandB(pillarACoordinate: number[], pillarBCoordinate: number[], pillarCoordinatesMap: Map<number, Map<number, boolean>>): boolean {
+    function isExistSquareMadeWithPillarAandB(pillarACoordinate: [number, number], pillarBCoordinate: [number, number], pillarCoordinatesMap: Map<number, Map<number, boolean>>): boolean {
         // 一つの柱からできる正方形には2通りが考えられるが、面積は変わらない
         // そのためどちらか片方が構成できれば構成できるとして返して良い
         
@@ -38,11 +38,11 @@ function solveSyoujin100_7(inputs:string[]) {
         let diffsBetweenAandB = [yDiff, xDiff]
 
         // X軸のみ変量を反転させ、対応する柱が存在するか確認
-        let trgPillarFromACoordinates = [pillarACoordinate[0] - diffsBetweenAandB[0], pillarACoordinate[1] + diffsBetweenAandB[1]]
-        let trgPillarFromBCoordinates = [pillarBCoordinate[0] - diffsBetweenAandB[0], pillarBCoordinate[1] + diffsBetweenAandB[1]]
+        let trgPillarFromACoordinates: [number, number] = [pillarACoordinate[0] - diffsBetweenAandB[0], pillarACoordinate[1] + diffsBetweenAandB[1]]
+        let trgPillarFromBCoordinates: [number, number] = [pillarBCoordinate[0] - diffsBetweenAandB[0], pillarBCoordinate[1] + diffsBetweenAandB[1]]
         if (
-            pillarCoordinatesMap.get(trgPillarFromACoordinates[0])?.get(trgPillarFromACoordinates[1]) && 
-            pillarCoordinatesMap.get(trgPillarFromBCoordinates[0])?.get(trgPillarFromBCoordinates[1]) 
+            pillarCoordinatesMap.get(trgPillarFromACoordinates[0])?.has(trgPillarFromACoordinates[1]) && 
+            pillarCoordinatesMap.get(trgPillarFromBCoordinates[0])?.has(trgPillarFromBCoordinates[1]) 
         ) {
             return true
         }
@@ -51,8 +51,8 @@ function solveSyoujin100_7(inputs:string[]) {
         trgPillarFromACoordinates = [pillarACoordinate[0] + diffsBetweenAandB[0], pillarACoordinate[1] - diffsBetweenAandB[1]]
         trgPillarFromBCoordinates = [pillarBCoordinate[0] + diffsBetweenAandB[0], pillarBCoordinate[1] - diffsBetweenAandB[1]]
         if (
-            pillarCoordinatesMap.get(trgPillarFromACoordinates[0])?.get(trgPillarFromACoordinates[1]) && 
-            pillarCoordinatesMap.get(trgPillarFromBCoordinates[0])?.get(trgPillarFromBCoordinates[1]) 
+            pillarCoordinatesMap.get(trgPillarFromACoordinates[0])?.has(trgPillarFromACoordinates[1]) && 
+            pillarCoordinatesMap.get(trgPillarFromBCoordinates[0])?.has(trgPillarFromBCoordinates[1]) 
         ) {
             return true
         }
