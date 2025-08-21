@@ -14,6 +14,17 @@ function solveSyoujin100_10(inputs:string[]) {
     }
 
     console.log(N, M, lightAndConnectedSwitch, pi)
+
+    // 
+    function is(params:type) {
+        for (let shiftCount = 0; shiftCount < N; shiftCount++) {
+            if ((bitStr >> shiftCount) & 1){
+                genStr = ")" + genStr
+            }else{
+                genStr = "(" + genStr
+            }
+        }
+    }
 }
 
 const inputSyoujin100_10 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
