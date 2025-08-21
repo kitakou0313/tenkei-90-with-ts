@@ -1,4 +1,4 @@
-function solveSyoujin100_10(inputs:string[]) {
+function solveSyoujin100_9(inputs:string[]) {
     const M = parseInt(inputs[0], 10)
     const starsInConstellationCoordinates: [number, number][] = []
     for (let index = 1; index < M + 1; index++) {
@@ -51,5 +51,5 @@ function solveSyoujin100_10(inputs:string[]) {
     }
 }
 
-const inputSyoujin100_10 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
-solveSyoujin100_10(inputSyoujin100_10)
+const inputSyoujin100_9 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
+solveSyoujin100_9(inputSyoujin100_9)
