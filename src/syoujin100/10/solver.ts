@@ -9,21 +9,20 @@ function solveSyoujin100_10(inputs:string[]) {
 
     const pi = inputs[inputs.length-1].split(" ").map((char) => {return parseInt(char, 10)})
 
-    for (let bitNunber = 0; bitNunber < Math.pow(2, N); bitNunber++) {
-        console.log(bitNunber)
+    for (let bitNumber = 0; bitNumber < Math.pow(2, N); bitNumber++) {
+        const switchNumToOnOffMapBasedBitNumber = convertBitNumberToOnOffPattern(bitNumber, N)
+        console.log(switchNumToOnOffMapBasedBitNumber)
     }
 
     console.log(N, M, lightAndConnectedSwitch, pi)
 
-    // 
-    function is(params:type) {
+    function convertBitNumberToOnOffPattern(bitNumber: number, N:number): Map<number, boolean> {
+        const switchNumToOnOffMap = new Map<number, boolean>()
         for (let shiftCount = 0; shiftCount < N; shiftCount++) {
-            if ((bitStr >> shiftCount) & 1){
-                genStr = ")" + genStr
-            }else{
-                genStr = "(" + genStr
-            }
+            // Bitの桁の1がOn, 0がOffに対応
+            switchNumToOnOffMap.set(shiftCount, ((bitNumber >> shiftCount) & 1) == 1 ? true:false)
         }
+        return switchNumToOnOffMap
     }
 }
 
