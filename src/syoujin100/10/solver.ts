@@ -12,12 +12,11 @@ function solveSyoujin100_10(inputs:string[]) {
     let numOfValidSwitchOnOffPattern = 0
     for (let bitNumber = 0; bitNumber < Math.pow(2, N); bitNumber++) {
         const switchNumToOnOffMapBasedBitNumber = convertBitNumberToOnOffPattern(bitNumber, N)
-        console.log(switchNumToOnOffMapBasedBitNumber)
         numOfValidSwitchOnOffPattern += isValidSwitchOnOffPattern(
             switchNumToOnOffMapBasedBitNumber, 
             pi,
             lightAndConnectedSwitch
-            )? 1 : 0
+        )? 1 : 0
     }
 
     console.log(numOfValidSwitchOnOffPattern)
@@ -26,7 +25,7 @@ function solveSyoujin100_10(inputs:string[]) {
         const switchNumToOnOffMap = new Map<number, boolean>()
         for (let shiftCount = 0; shiftCount < N; shiftCount++) {
             // Bitの桁の1がOn, 0がOffに対応
-            switchNumToOnOffMap.set(shiftCount, ((bitNumber >> shiftCount) & 1) == 1 ? true:false)
+            switchNumToOnOffMap.set(shiftCount + 1, ((bitNumber >> shiftCount) & 1) == 1 ? true:false)
         }
         return switchNumToOnOffMap
     }
@@ -37,7 +36,7 @@ function solveSyoujin100_10(inputs:string[]) {
             for (const connectedSwitch of connectedSwitchSet) {
                 onSwitchNum += switchNumToOnOffMap.get(connectedSwitch)? 1 : 0
             }
-            if(onSwitchNum % 2 != pi[lightNumber]){
+            if(onSwitchNum % 2 != pi[lightNumber-1]){
                 return false
             }
         }
