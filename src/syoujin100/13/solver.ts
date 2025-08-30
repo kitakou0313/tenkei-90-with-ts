@@ -21,6 +21,15 @@ function solveSyoujin100_13(inputs:string[]) {
 
         return rowNumberSet
     }
+    function countSenbeiIsOnFront(senbeis: number[][]):number {
+        let count = 0
+        for (let row = 0; row < senbeis.length; row++) {
+            for (let column = 0; column < senbeis[row].length; column++) {
+                count += senbeis[row][column] == 0 ? 1:0 
+            }
+        }
+        return count
+    }
 }
 
 const inputSyoujin100_13 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
