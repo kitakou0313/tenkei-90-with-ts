@@ -7,9 +7,38 @@ function solveSyoujin100_13(inputs:string[]) {
         )
     }
 
+    let maxSenbeiCountAfterOperation = -1
     for (let bitNumber = 0; bitNumber < Math.pow(2, R); bitNumber++) {
-        const rowNumberSet = convertBitNumberToRowNumberSet(bitNumber, R)
+        const selectedRowNumberSet = convertBitNumberToRowNumberSet(bitNumber, R)
+        const senbeiMapForCurrentBit = senbeiMap.map((row) => {return [...row]})
+
+        // 選択された行の煎餅を裏返す
+        for (const selectedRow of selectedRowNumberSet) {
+            for (let column = 0; column < C; column++) {
+                senbeiMapForCurrentBit[selectedRow][column] = senbeiMapForCurrentBit[selectedRow][column] == 0 ? 1 : 0
+            }
+        }
+        
+        // 各列について、必要があれば煎餅を返す
+        for (let column = 0; column < C; column++) {
+            let senbeiOnFrontCount = 0
+            for (let row = 0; row < R; row++) {
+                senbeiOnFrontCount += senbeiMapForCurrentBit[row][column] == 0 ? 1 : 0
+            }
+
+            const senbeiOnBackCount = R - senbeiOnFrontCount
+            if(senbeiOnBackCount > senbeiOnFrontCount){
+                for (let row = 0; row < R; row++) {
+                    senbeiMapForCurrentBit[row][column] = senbeiMapForCurrentBit[row][column] == 0 ? 1 : 0
+                }
+            }
+        }
+
+        // カウントする
+        maxSenbeiCountAfterOperation = Math.max(maxSenbeiCountAfterOperation, countSenbeiIsOnFront(senbeiMapForCurrentBit))
     }
+
+    console.log(maxSenbeiCountAfterOperation)
 
     function convertBitNumberToRowNumberSet(bitNumber: number, R: number): Set<number> {
         const rowNumberSet = new Set<number>()
