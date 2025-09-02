@@ -6,21 +6,39 @@ function solveSyoujin14(inputs:string[]) {
     const [N, K] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const buildingHeights = parseSpaceSeparatedLineToNumberArray(inputs[1])
 
-    for (let bitNumber = 0; bitNumber < N; bitNumber++) {
-       
-        const selectedBuildingNumberSet = convertBitNumberToBuildingIndexSet(bitNumber, N)
+    let leastCost = Number.POSITIVE_INFINITY
+    for (let bitNumber = 0; bitNumber < Math.pow(2, N); bitNumber++) {
+        let sumOfNeededHeights = 0
+
+        const buildingHeightsAfterAddingHeight = Array.from(buildingHeights)
+        const selectedBuildingNumberArray = convertBitNumberToBuildingIndexSet(bitNumber, N)
+
+        for (const selectedBuildinNumber of selectedBuildingNumberArray) {
+            const neededHeight = calcHeightNeededToBeVisible(buildingHeights, selectedBuildinNumber)
+            buildingHeightsAfterAddingHeight[selectedBuildinNumber] += neededHeight
+            sumOfNeededHeights += neededHeight
+        }
+
+        leastCost = Math.min(leastCost, sumOfNeededHeights)
     }
 
-    function convertBitNumberToBuildingIndexSet(bitNumber:number, N:number):Set<number> {
-        const buildingIndexSet = new Set<number>()
+    console.log(leastCost)
+
+    function convertBitNumberToBuildingIndexSet(bitNumber:number, N:number):number[] {
+        const buildingIndexList: number[] = []
 
         for (let shiftNumber = 0; shiftNumber < N; shiftNumber++) {
             if ((bitNumber >> shiftNumber & 1) == 1) {
-                buildingIndexSet.add(shiftNumber)
+                buildingIndexList.push(shiftNumber)
             }
         }
 
-        return buildingIndexSet
+        return buildingIndexList
+    }
+
+    function calcHeightNeededToBeVisible(buildingHeights: number[], selectedBuildingNumber: number): number {
+        for (let j = 0; j < selectedBuildingNumber; j++) { 
+        }
     }
 }
 
