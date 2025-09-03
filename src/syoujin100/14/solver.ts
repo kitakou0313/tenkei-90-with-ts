@@ -11,20 +11,22 @@ function solveSyoujin14(inputs:string[]) {
         let sumOfNeededHeights = 0
 
         const buildingHeightsAfterAddingHeight = Array.from(buildingHeights)
-        const selectedBuildingNumberArray = convertBitNumberToBuildingIndexSet(bitNumber, N)
+        const selectedBuildingNumberArray = convertBitNumberToBuildingIndexArray(bitNumber, N)
+        if (selectedBuildingNumberArray.length != K) {
+            continue
+        }
 
         for (const selectedBuildinNumber of selectedBuildingNumberArray) {
-            const neededHeight = calcHeightNeededToBeVisible(buildingHeights, selectedBuildinNumber)
+            const neededHeight = calcHeightNeededToBeVisible(buildingHeightsAfterAddingHeight, selectedBuildinNumber)
             buildingHeightsAfterAddingHeight[selectedBuildinNumber] += neededHeight
             sumOfNeededHeights += neededHeight
         }
-
         leastCost = Math.min(leastCost, sumOfNeededHeights)
     }
 
     console.log(leastCost)
 
-    function convertBitNumberToBuildingIndexSet(bitNumber:number, N:number):number[] {
+    function convertBitNumberToBuildingIndexArray(bitNumber:number, N:number):number[] {
         const buildingIndexList: number[] = []
 
         for (let shiftNumber = 0; shiftNumber < N; shiftNumber++) {
@@ -37,7 +39,12 @@ function solveSyoujin14(inputs:string[]) {
     }
 
     function calcHeightNeededToBeVisible(buildingHeights: number[], selectedBuildingNumber: number): number {
-        for (let j = 0; j < selectedBuildingNumber; j++) { 
+        let mostHeightestHeightInFrontOfSelectedBuilding = Math.max(...buildingHeights.slice(0, selectedBuildingNumber))
+        
+        if (mostHeightestHeightInFrontOfSelectedBuilding >= buildingHeights[selectedBuildingNumber]) {
+            return mostHeightestHeightInFrontOfSelectedBuilding + 1 - buildingHeights[selectedBuildingNumber]
+        }else{
+            return 0
         }
     }
 }
