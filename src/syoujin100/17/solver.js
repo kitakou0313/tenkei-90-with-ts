@@ -14,7 +14,7 @@ function solveSyoujin17(inputs) {
     console.log(countQiExistInNi);
     function searchQiInNisByBinSearch(qi, nis) {
         // 二分探索で最小値の最大化を行う
-        var left = 0; // qiより小さい
+        var left = 0; // qi以下
         var right = nis.length; // qiより大きい
         var mid = right;
         while (right - left > 1) { // これらが隣り合う値になる -> 差が1になるまで探索する
@@ -26,7 +26,7 @@ function solveSyoujin17(inputs) {
                 left = mid;
             }
         }
-        return (nis[mid] === qi);
+        return (nis[left] === qi);
     }
 }
 var inputSyoujin17 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');

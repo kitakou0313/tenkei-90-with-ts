@@ -18,7 +18,7 @@ function solveSyoujin17(inputs:string[]) {
 
     function searchQiInNisByBinSearch(qi:number, nis:number[]): boolean {
         // 二分探索で最小値の最大化を行う
-        let left = 0; // qiより小さい
+        let left = 0; // qi以下
         let right = nis.length; // qiより大きい
         let mid = right;
 
@@ -32,7 +32,7 @@ function solveSyoujin17(inputs:string[]) {
             }
         }
 
-        return (nis[mid] === qi)
+        return (nis[left] === qi)
     }
 }
 
