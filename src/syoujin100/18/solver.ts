@@ -4,8 +4,8 @@ function parseSpaceSeparatedLineToNumberArray(line:string): number[] {
 
 function solveSyoujin18(inputs:string[]) {
     const [d] = parseSpaceSeparatedLineToNumberArray(inputs[0])
-    const [m] = parseSpaceSeparatedLineToNumberArray(inputs[1])
-    const [n] = parseSpaceSeparatedLineToNumberArray(inputs[2])
+    const [n] = parseSpaceSeparatedLineToNumberArray(inputs[1])
+    const [m] = parseSpaceSeparatedLineToNumberArray(inputs[2])
 
     const shopPositions: number[] = [] // 本店を含めていない点に注意
     for (let line = 3; line < 3 + (n - 1); line++) {
@@ -13,18 +13,22 @@ function solveSyoujin18(inputs:string[]) {
         shopPositions.push(di)
     }
     const orderGoalPositions: number[] = []
-    for (let line = n + 3; line < inputs.length; line++) {
+    for (let line = n + 3 - 1; line < inputs.length; line++) {
         const [ki] = parseSpaceSeparatedLineToNumberArray(inputs[line])
         orderGoalPositions.push(ki)
     }
-    // 末尾と先頭に本店を追加
-    shopPositions.push(0, d)
+
+    // 本店を追加
+    // 円環状の配置のため、距離0と距離d(最大)に配置する
+    shopPositions.push(...[0, d])
     // お店を距離順にソート
-    shopPositions.sort()
+    shopPositions.sort((a, b) => a - b)
 
     let sumOfDistanceFromNearestShopAndOrderGoal = 0
     for (const orderGoalPos of orderGoalPositions) {
-        
+        sumOfDistanceFromNearestShopAndOrderGoal += calcLeastDistanceBetweenShopAndShop(
+            orderGoalPos, shopPositions
+        )
     }
 
     console.log(sumOfDistanceFromNearestShopAndOrderGoal)
@@ -35,14 +39,25 @@ function solveSyoujin18(inputs:string[]) {
     function calcLeastDistanceBetweenShopAndShop(orderGoalPos: number, shopPositions:number[]): number {
         // 配送先より小さい距離のお店を指す
         let left = 0
-        // 配送先より大きい距離のお店をさす
+        // 配送先より大きい距離のお店を指す
         let right = shopPositions.length - 1
 
         while ((right - left) > 1) {
-            
+            const mid = Math.floor((left + right) / 2)
+            if (shopPositions[mid] < orderGoalPos) {
+                left = mid
+            }else{
+                right = mid
+            }
         }
 
+        const distanceBetweenLeftShopAndOrderGoalPos = orderGoalPos - shopPositions[left]
+        const distanceBetweenOrderGoalPosAndRightShop = shopPositions[right] - orderGoalPos
 
+        return Math.min(
+            distanceBetweenLeftShopAndOrderGoalPos, 
+            distanceBetweenOrderGoalPosAndRightShop
+        )
     }
 
 }
