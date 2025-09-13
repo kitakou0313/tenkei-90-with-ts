@@ -2,6 +2,10 @@ function parseSpaceSeparatedLineToNumberArray(line:string): number[] {
     return line.split(" ").map((char) => {return parseInt(char, 10)})
 }
 
+function parseFirstNumber(line: string): number {
+    return parseInt(line, 10);
+}
+
 function solveSyoujin18(inputs:string[]) {
     const [d] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const [n] = parseSpaceSeparatedLineToNumberArray(inputs[1])
@@ -9,12 +13,12 @@ function solveSyoujin18(inputs:string[]) {
 
     const shopPositions: number[] = [] // 本店を含めていない点に注意
     for (let line = 3; line < 3 + (n - 1); line++) {
-        const [di] = parseSpaceSeparatedLineToNumberArray(inputs[line])
+        const di = parseFirstNumber(inputs[line])
         shopPositions.push(di)
     }
     const orderGoalPositions: number[] = []
     for (let line = n + 3 - 1; line < inputs.length; line++) {
-        const [ki] = parseSpaceSeparatedLineToNumberArray(inputs[line])
+        const ki = parseFirstNumber(inputs[line])
         orderGoalPositions.push(ki)
     }
 
