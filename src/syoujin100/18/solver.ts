@@ -2,69 +2,39 @@ function parseSpaceSeparatedLineToNumberArray(line:string): number[] {
     return line.split(" ").map((char) => {return parseInt(char, 10)})
 }
 
-function parseFirstNumber(line: string): number {
-    return parseInt(line, 10);
-}
+function solveSyoujin17(inputs:string[]) {
+    const [N] = parseSpaceSeparatedLineToNumberArray(inputs[0])
+    const nis = parseSpaceSeparatedLineToNumberArray(inputs[1])
+    const [Q] = parseSpaceSeparatedLineToNumberArray(inputs[2])
+    const qis = parseSpaceSeparatedLineToNumberArray(inputs[3])
 
-function solveSyoujin18(inputs:string[]) {
-    const [d] = parseSpaceSeparatedLineToNumberArray(inputs[0])
-    const [n] = parseSpaceSeparatedLineToNumberArray(inputs[1])
-    const [m] = parseSpaceSeparatedLineToNumberArray(inputs[2])
+    let countQiExistInNi = 0
 
-    const shopPositions: number[] = [] // 本店を含めていない点に注意
-    for (let line = 3; line < 3 + (n - 1); line++) {
-        const di = parseFirstNumber(inputs[line])
-        shopPositions.push(di)
-    }
-    const orderGoalPositions: number[] = []
-    for (let line = n + 3 - 1; line < inputs.length; line++) {
-        const ki = parseFirstNumber(inputs[line])
-        orderGoalPositions.push(ki)
+    for (const qi of qis) {
+        countQiExistInNi += searchQiInNisByBinSearch(qi, nis) ? 1 : 0
     }
 
-    // 本店を追加
-    // 円環状の配置のため、距離0と距離d(最大)に配置する
-    shopPositions.push(...[0, d])
-    // お店を距離順にソート
-    shopPositions.sort((a, b) => a - b)
+    console.log(countQiExistInNi)
 
-    let sumOfDistanceFromNearestShopAndOrderGoal = 0
-    for (const orderGoalPos of orderGoalPositions) {
-        sumOfDistanceFromNearestShopAndOrderGoal += calcLeastDistanceBetweenShopAndShop(
-            orderGoalPos, shopPositions
-        )
-    }
+    function searchQiInNisByBinSearch(qi:number, nis:number[]): boolean {
+        // 二分探索で最小値の最大化を行う
+        let left = 0; // qi以下
+        let right = nis.length; // qiより大きい
+        let mid = right;
 
-    console.log(sumOfDistanceFromNearestShopAndOrderGoal)
+        while (right - left > 1) { // これらが隣り合う値になる -> 差が1になるまで探索する
+            mid = Math.floor((right + left) / 2)
 
-    
-    // 0 ~ 宅配先までで最も近いお店 と 宅配先 ~ 本店（末尾）までで最も近いお店を探索する
-    // その後それらのお店のうち近い方を発送元とする
-    function calcLeastDistanceBetweenShopAndShop(orderGoalPos: number, shopPositions:number[]): number {
-        // 配送先より小さい距離のお店を指す
-        let left = 0
-        // 配送先より大きい距離のお店を指す
-        let right = shopPositions.length - 1
-
-        while ((right - left) > 1) {
-            const mid = Math.floor((left + right) / 2)
-            if (shopPositions[mid] < orderGoalPos) {
-                left = mid
-            }else{
+            if (nis[mid] > qi) {
                 right = mid
+            } else {
+                left = mid
             }
         }
 
-        const distanceBetweenLeftShopAndOrderGoalPos = orderGoalPos - shopPositions[left]
-        const distanceBetweenOrderGoalPosAndRightShop = shopPositions[right] - orderGoalPos
-
-        return Math.min(
-            distanceBetweenLeftShopAndOrderGoalPos, 
-            distanceBetweenOrderGoalPosAndRightShop
-        )
+        return (nis[left] === qi)
     }
-
 }
 
-const inputSyoujin18 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
-solveSyoujin18(inputSyoujin18)
+const inputSyoujin17 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
+solveSyoujin17(inputSyoujin17)
