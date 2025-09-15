@@ -9,15 +9,45 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin20(inputs:string[]) {
     const N = parseFirstNumber(inputs[0])
-    const Ai_list = parseSpaceSeparatedLineToNumberArray(
+    const AiList = parseSpaceSeparatedLineToNumberArray(
         inputs[1]
     )
-    const Bi_list = parseSpaceSeparatedLineToNumberArray(
+    const BiList = parseSpaceSeparatedLineToNumberArray(
         inputs[2]
     )
-    const Ci_list = parseSpaceSeparatedLineToNumberArray(
+    const CiList = parseSpaceSeparatedLineToNumberArray(
         inputs[3]
     )
+    
+    const sortedAiList = AiList.sort((a, b) =>  a - b )
+    const sortedBiList = BiList.sort((a, b) =>  a - b )
+    const sortedCiList = CiList.sort((a, b) =>  a - b )
+
+    const indexInBiToCountOfBiggerElementInCi: number[] = Array.from({length : N}, () => 0)
+    for (let index = 0; index < sortedBiList.length; index++) {
+        const indexInCiOfFirstBiggerElement = searchIndexOfFirstBiggerElementByBinSearch(
+            sortedBiList[index], sortedCiList
+        )
+        indexInBiToCountOfBiggerElementInCi[index] = indexInCiOfFirstBiggerElement
+    }
+
+    // ソート済み配列の中でtrgNumber引数に与えた値よりも大きい値のindexを返す 見つからなければsortedArray.lengthを返す
+    function searchIndexOfFirstBiggerElementByBinSearch(trgNumber: number, sortedArray: number[]): number {
+        let left = -1 // trgNumber以下
+        let right = sortedArray.length // trgNumberより大きい
+
+        while (right - left > 1) {
+            const middle = Math.floor((left + right) / 2)
+            if (sortedArray[middle] <= trgNumber) {
+                left = middle
+            } else {
+                right = middle
+            }
+        }
+
+        return right
+    }
+
 }
 
 const inputSyoujin20 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
