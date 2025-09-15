@@ -23,13 +23,32 @@ function solveSyoujin20(inputs:string[]) {
     const sortedBiList = BiList.sort((a, b) =>  a - b )
     const sortedCiList = CiList.sort((a, b) =>  a - b )
 
-    const indexInBiToCountOfBiggerElementInCi: number[] = Array.from({length : N}, () => 0)
+    const indexInSortedBiToCountOfBiggerElementInCi: number[] = Array.from({length : N}, () => 0)
     for (let index = 0; index < sortedBiList.length; index++) {
-        const indexInCiOfFirstBiggerElement = searchIndexOfFirstBiggerElementByBinSearch(
+        const indexInSortedCiOfFirstBiggerElement = searchIndexOfFirstBiggerElementByBinSearch(
             sortedBiList[index], sortedCiList
         )
-        indexInBiToCountOfBiggerElementInCi[index] = indexInCiOfFirstBiggerElement
+        indexInSortedBiToCountOfBiggerElementInCi[index] = N - indexInSortedCiOfFirstBiggerElement
     }
+    const indexInSortedBiToAlterCount: number[] = Array.from({length : N}, () => 0)
+    indexInSortedBiToAlterCount[N - 1] = indexInSortedBiToCountOfBiggerElementInCi[N - 1]
+    for (let index = N - 2; index > -1; index--) {
+        indexInSortedBiToAlterCount[index] = indexInSortedBiToAlterCount[index + 1] + indexInSortedBiToCountOfBiggerElementInCi[index]
+    }
+
+    let countOfPossibleAlter = 0
+    for (let index = 0; index < N; index++) {
+        const ai = sortedAiList[index]
+        const indexInSortedBiOfFirstBiggerElement = searchIndexOfFirstBiggerElementByBinSearch(
+            ai, sortedBiList
+        )
+        if (indexInSortedBiOfFirstBiggerElement == N) {
+            continue
+        }
+        countOfPossibleAlter += indexInSortedBiToAlterCount[indexInSortedBiOfFirstBiggerElement]
+    }
+    console.log(countOfPossibleAlter)
+
 
     // ソート済み配列の中でtrgNumber引数に与えた値よりも大きい値のindexを返す 見つからなければsortedArray.lengthを返す
     function searchIndexOfFirstBiggerElementByBinSearch(trgNumber: number, sortedArray: number[]): number {
