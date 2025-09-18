@@ -19,6 +19,13 @@ function solveSyoujin21(inputs:string[]) {
         SiList.push(Si)
     }
 
+    const availablePenaltyCandidates: number[] = []
+    for (let i = 0; i < HiList.length; i++) {
+        for (let n = 0; n < N; n++) {
+            availablePenaltyCandidates.push(HiList[i] + n * SiList[i])
+        }
+    }
+
 }
 
 const inputSyoujin21 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
