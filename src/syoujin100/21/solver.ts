@@ -19,11 +19,28 @@ function solveSyoujin21(inputs:string[]) {
         SiList.push(Si)
     }
 
-    const availablePenaltyCandidates: number[] = []
+    let availableMaxHeight = -1
     for (let i = 0; i < HiList.length; i++) {
-        for (let n = 0; n < N; n++) {
-            availablePenaltyCandidates.push(HiList[i] + n * SiList[i])
+        availableMaxHeight = Math.max(availableMaxHeight, HiList[i] + (N-1)*SiList[i])
+    }
+
+    let left = 0 // 風船を割り切ることが不可能な高度
+    let right = availableMaxHeight // 風船を割ることが可能な高度
+
+    while (right - left > 1) {
+        const mid = Math.floor((right + left) / 2)
+        if (isPossibleToBreakAllBalloonsBelowHight(mid, HiList, SiList)) {
+            right = mid
+        }else{
+            left = mid
         }
+    }
+
+    console.log(right)
+
+    
+    function isPossibleToBreakAllBalloonsBelowHight(trgHeight: number, HiList: number[], SiList: number[]): boolean {
+        
     }
 
 }
