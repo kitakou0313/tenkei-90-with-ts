@@ -49,11 +49,8 @@ function solveSyoujin21(inputs:string[]) {
             }         
             timelimits.push(timelimitOfBalooni)
         }
-        
-        console.log(timelimits)
-        timelimits.sort((a, b) => a - b)
-        console.log(timelimits)
 
+        timelimits.sort((a, b) => a - b)
 
         for (let i = 0; i < HiList.length; i++) {
             if (timelimits[i] < i) {
