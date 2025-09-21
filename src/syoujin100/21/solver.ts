@@ -11,7 +11,7 @@ function solveSyoujin21(inputs:string[]) {
     const N = parseFirstNumber(inputs[0])
     const HiList: number[] = []
     const SiList: number[] = []
-    for (let line = 0; line < inputs.length; line++) {
+    for (let line = 1; line < inputs.length; line++) {
         const [Hi, Si] = parseSpaceSeparatedLineToNumberArray(
             inputs[line]
         );
@@ -29,7 +29,7 @@ function solveSyoujin21(inputs:string[]) {
 
     while (right - left > 1) {
         const mid = Math.floor((right + left) / 2)
-        if (isPossibleToBreakAllBalloonsBelowHight(mid, HiList, SiList)) {
+        if (isPossibleToBreakAllBalloonsBelowHeight(mid, HiList, SiList)) {
             right = mid
         }else{
             left = mid
@@ -39,8 +39,29 @@ function solveSyoujin21(inputs:string[]) {
     console.log(right)
 
     
-    function isPossibleToBreakAllBalloonsBelowHight(trgHeight: number, HiList: number[], SiList: number[]): boolean {
+    function isPossibleToBreakAllBalloonsBelowHeight(trgHeight: number, HiList: number[], SiList: number[]): boolean {
+        const timelimits: number[] = []
+
+        for (let i = 0; i < HiList.length; i++) {
+            const timelimitOfBalooni = Math.floor((trgHeight - HiList[i]) / SiList[i])  
+            if (timelimitOfBalooni < 0) {
+                return false
+            }         
+            timelimits.push(timelimitOfBalooni)
+        }
         
+        console.log(timelimits)
+        timelimits.sort((a, b) => a - b)
+        console.log(timelimits)
+
+
+        for (let i = 0; i < HiList.length; i++) {
+            if (timelimits[i] < i) {
+                return false
+            }            
+        }
+        return true
+
     }
 
 }
