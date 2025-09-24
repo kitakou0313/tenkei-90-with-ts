@@ -13,6 +13,22 @@ function solveSyoujin23(inputs:string[]) {
     for (let line = 1; line < inputs.length; line++) {
         PiList.push(parseFirstNumber(inputs[line]))
     }
+
+    function search(params:type) {
+        let left = 0 // 条件を満たさない
+        let right = 1000 // 条件を満たす
+        // 上は逆でも可能
+
+        while (right - left > 1) {
+            const mid = Math.floor((left + right) / 2)
+
+            if (mid) {
+                right = mid
+            }else{
+                left = mid
+            }
+        }
+    }
 }
 
 const inputSyoujin23 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
