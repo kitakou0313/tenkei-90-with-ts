@@ -13,20 +13,20 @@ function solveSyoujin23(inputs:string[]) {
     for (let line = 1; line < inputs.length; line++) {
         PiList.push(parseFirstNumber(inputs[line]))
     }
-    
-    let left = 0 // 条件を満たさない
-    let right = M // 条件を満たす
-    // 上は逆でも可能
 
-    while (right - left > 1) {
-        const mid = Math.floor((left + right) / 2)
-
-        if (mid) {
-            right = mid
-        }else{
-            left = mid
+    // 二つ選んだ時の合計を列挙する
+    const SiList: Set<number> = new Set()
+    for (const Pi1 of PiList) {
+        for (const Pi2 of PiList) {
+            SiList.add(Pi1 + Pi2)
         }
     }
+    SiList.add(0)
+    const sorttedSiList = Array.from(SiList).sort((a, b) =>  a - b)
+
+    // A, BをSiの要素とする
+    // 各Aについて、M - B以下の最大値を探索する（2分探索）
+    // その最大値が解答
     
 }
 
