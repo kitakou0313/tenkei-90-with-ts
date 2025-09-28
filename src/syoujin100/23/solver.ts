@@ -13,7 +13,7 @@ function solveSyoujin23(inputs:string[]) {
     for (let line = 1; line < inputs.length; line++) {
         PiList.push(parseFirstNumber(inputs[line]))
     }
-
+    PiList.push(0)
     // 二つ選んだ時の合計を列挙する
     const SiList: Set<number> = new Set()
     for (const Pi1 of PiList) {
@@ -21,26 +21,26 @@ function solveSyoujin23(inputs:string[]) {
             SiList.add(Pi1 + Pi2)
         }
     }
-    SiList.add(0)
     const sortedSiList = Array.from(SiList).sort((a, b) =>  a - b)
 
     // A, BをSiの要素とする
     // 各Aについて、M - A以下となるBiの最大値を探索する（2分探索）
     // その最大値が解答
-    let biggestNumberInSiThroughAllAi = Number.NEGATIVE_INFINITY
-    for (const Ai of SiList) {
+    let biggestScoreInSiThroughAllAi = Number.NEGATIVE_INFINITY
+    for (const Ai of sortedSiList) {
         const searchResultWithAi = searchBiggestNumberlessThenThreshold(sortedSiList, M - Ai)
 
         switch (typeof searchResultWithAi) {
             case "number":
-                biggestNumberInSiThroughAllAi = Math.max(searchResultWithAi, biggestNumberInSiThroughAllAi)
-                break;
+                biggestScoreInSiThroughAllAi = Math.max(searchResultWithAi + Ai, biggestScoreInSiThroughAllAi)
+                break
             case "undefined":
-                biggestNumberInSiThroughAllAi = Math.max(0, biggestNumberInSiThroughAllAi)
+                biggestScoreInSiThroughAllAi = Math.max(0, biggestScoreInSiThroughAllAi)
+                break
         }
         
     }
-    console.log(biggestNumberInSiThroughAllAi)
+    console.log(biggestScoreInSiThroughAllAi)
 
     function searchBiggestNumberlessThenThreshold(sortedNumberList: number[], threshold: number): number | undefined {
         let left = -1 // threshold以下の値
@@ -58,8 +58,9 @@ function solveSyoujin23(inputs:string[]) {
         // left = -1の時
         // sortedNumberListにはthresholdより大きい値しかない
         // 適当なあり得ない値を返す
-
-
+        if (left === -1) {
+            return undefined
+        }
         // left = sortedNumberList.length - 1の時
         // sortedNumberListにはthreshold以下の値しかない
         // leftのindexの値が最大値なのでそのまま返して良い
