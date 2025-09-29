@@ -11,11 +11,47 @@ function solveSyoujin24(inputs:string[]) {
     const N = parseFirstNumber(inputs[0])
     const graph: number[][] = []
     for (let line = 1; line < inputs.length; line++) {
-        const element = inputs[line];
         const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[line])
         graph.push(parsedLine.splice(2))
     }
-    console.log(graph)
+
+    // DFSする
+    
+    class Stack<T>{
+        private items: T[] = []
+        
+        constructor(items: T[]) {
+            this.items = items
+        }
+
+        /**
+         * pop
+         */
+        public pop() {
+            return this.items.pop()
+        }
+
+        /**
+         * push
+         */
+        public push(item: T) {
+            this.items.push(item)
+        }
+
+        /**
+         * top
+         */
+        public top() {
+            return this.items[-1]
+        }
+
+        /**
+         * isEmpty
+         */
+        public isEmpty() {
+            return this.items.length == 0
+        }
+    }
 }
 
 const inputSyoujin24 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
