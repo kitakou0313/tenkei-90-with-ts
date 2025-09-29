@@ -9,10 +9,10 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin24(inputs:string[]) {
     const N = parseFirstNumber(inputs[0])
-    const graph: number[][] = []
+    const graph: Map<number, number[]> = new Map()
     for (let line = 1; line < inputs.length; line++) {
         const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[line])
-        graph.push(parsedLine.splice(2))
+        graph.set(parsedLine[0], parsedLine.splice(2))
     }
 
     // DFSする
