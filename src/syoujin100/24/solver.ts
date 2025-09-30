@@ -8,15 +8,6 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin24(inputs:string[]) {
-    const N = parseFirstNumber(inputs[0])
-    const graph: Map<number, number[]> = new Map()
-    for (let line = 1; line < inputs.length; line++) {
-        const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[line])
-        graph.set(parsedLine[0], parsedLine.splice(2))
-    }
-
-    // DFSする
-    
     class Stack<T>{
         private items: T[] = []
         
@@ -52,6 +43,39 @@ function solveSyoujin24(inputs:string[]) {
             return this.items.length == 0
         }
     }
+    
+    const N = parseFirstNumber(inputs[0])
+    const graph: Map<number, number[]> = new Map()
+    for (let line = 1; line < inputs.length; line++) {
+        const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[line])
+        graph.set(parsedLine[0], parsedLine.splice(2))
+    }
+
+    // DFSする
+
+    const visitedNodesSet = new Set()
+    const nodesSearchTime: Map<number, [number, number]> = new Map()
+    let searchStepCount = 1
+    function dfs(startNode:number) {
+        visitedNodesSet.add(startNode)
+        nodesSearchTime.set(startNode, [searchStepCount, -1])
+        searchStepCount += 1
+        
+        const connectedNodesList = graph.get(startNode)
+        if (connectedNodesList === undefined){
+            return
+        }
+        for (const nextNode of connectedNodesList) {
+            if (visitedNodesSet.has(nextNode)) {
+                continue
+            }
+            dfs(nextNode)
+        }
+        searchStepCount += 1;
+        (nodesSearchTime.get(startNode) as number[])[1] = searchStepCount
+    }
+    
+    console.log(nodesSearchTime)
 }
 
 const inputSyoujin24 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
