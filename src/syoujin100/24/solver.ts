@@ -8,42 +8,6 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin24(inputs:string[]) {
-    class Stack<T>{
-        private items: T[] = []
-        
-        constructor(items: T[]) {
-            this.items = items
-        }
-
-        /**
-         * pop
-         */
-        public pop() {
-            return this.items.pop()
-        }
-
-        /**
-         * push
-         */
-        public push(item: T) {
-            this.items.push(item)
-        }
-
-        /**
-         * top
-         */
-        public top() {
-            return this.items[-1]
-        }
-
-        /**
-         * isEmpty
-         */
-        public isEmpty() {
-            return this.items.length == 0
-        }
-    }
-    
     const N = parseFirstNumber(inputs[0])
     const graph: Map<number, number[]> = new Map()
     for (let line = 1; line < inputs.length; line++) {
@@ -54,12 +18,12 @@ function solveSyoujin24(inputs:string[]) {
     // DFSする
 
     const visitedNodesSet = new Set()
-    const nodesSearchTime: Map<number, [number, number]> = new Map()
-    let searchStepCount = 1
+    const nodesSearchTimes: Map<number, [number, number]> = new Map()
+    let searchStepCount = 0
     function dfs(startNode:number) {
         visitedNodesSet.add(startNode)
-        nodesSearchTime.set(startNode, [searchStepCount, -1])
         searchStepCount += 1
+        nodesSearchTimes.set(startNode, [searchStepCount, -1])
         
         const connectedNodesList = graph.get(startNode)
         if (connectedNodesList === undefined){
@@ -72,10 +36,15 @@ function solveSyoujin24(inputs:string[]) {
             dfs(nextNode)
         }
         searchStepCount += 1;
-        (nodesSearchTime.get(startNode) as number[])[1] = searchStepCount
+        (nodesSearchTimes.get(startNode) as number[])[1] = searchStepCount
     }
+    dfs(1)
     
-    console.log(nodesSearchTime)
+    // 出力をnodeNumberで昇順にする
+    for (const [nodeNumber, nodeSearchTime] of nodesSearchTimes) {
+        console.log('%d %d %d', nodeNumber, nodeSearchTime[0], nodeSearchTime[1])
+    }
+
 }
 
 const inputSyoujin24 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
