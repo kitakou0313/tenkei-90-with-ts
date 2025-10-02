@@ -9,10 +9,10 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin24(inputs:string[]) {
     const N = parseFirstNumber(inputs[0])
-    const graph: Map<number, number[]> = new Map()
+    const graph: number[][] = []
     for (let line = 1; line < inputs.length; line++) {
         const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[line])
-        graph.set(parsedLine[0], parsedLine.splice(2))
+        graph.push(parsedLine.splice(2))
     }
 
     // DFSする
@@ -21,14 +21,12 @@ function solveSyoujin24(inputs:string[]) {
     const nodesSearchTimes: Map<number, [number, number]> = new Map()
     let searchStepCount = 0
     function dfs(startNode:number) {
+        console.log(graph, startNode, nodesSearchTimes, visitedNodesSet)
         visitedNodesSet.add(startNode)
         searchStepCount += 1
         nodesSearchTimes.set(startNode, [searchStepCount, -1])
         
-        const connectedNodesList = graph.get(startNode)
-        if (connectedNodesList === undefined){
-            return
-        }
+        const connectedNodesList = graph[startNode-1]
         for (const nextNode of connectedNodesList) {
             if (visitedNodesSet.has(nextNode)) {
                 continue
@@ -38,10 +36,17 @@ function solveSyoujin24(inputs:string[]) {
         searchStepCount += 1;
         (nodesSearchTimes.get(startNode) as number[])[1] = searchStepCount
     }
+
+    // 1から未到達のNodeに対して追加実行する処理を入れる
     dfs(1)
     
     // 出力をnodeNumberで昇順にする
-    for (const [nodeNumber, nodeSearchTime] of nodesSearchTimes) {
+    for (let nodeNumber = 1; nodeNumber <= N; nodeNumber++) {
+        console.log(nodeNumber)
+        const nodeSearchTime = nodesSearchTimes.get(nodeNumber)
+        if (typeof nodeSearchTime === "undefined") {
+            continue
+        }
         console.log('%d %d %d', nodeNumber, nodeSearchTime[0], nodeSearchTime[1])
     }
 
