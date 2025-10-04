@@ -21,7 +21,6 @@ function solveSyoujin24(inputs:string[]) {
     const nodesSearchTimes: Map<number, [number, number]> = new Map()
     let searchStepCount = 0
     function dfs(startNode:number) {
-        console.log(graph, startNode, nodesSearchTimes, visitedNodesSet)
         visitedNodesSet.add(startNode)
         searchStepCount += 1
         nodesSearchTimes.set(startNode, [searchStepCount, -1])
@@ -36,13 +35,15 @@ function solveSyoujin24(inputs:string[]) {
         searchStepCount += 1;
         (nodesSearchTimes.get(startNode) as number[])[1] = searchStepCount
     }
-
-    // 1から未到達のNodeに対して追加実行する処理を入れる
-    dfs(1)
+    for (let nodeNumber = 1; nodeNumber <= N; nodeNumber++) {
+        if (visitedNodesSet.has(nodeNumber)) {
+            continue
+        }
+        dfs(nodeNumber)
+    }
     
     // 出力をnodeNumberで昇順にする
     for (let nodeNumber = 1; nodeNumber <= N; nodeNumber++) {
-        console.log(nodeNumber)
         const nodeSearchTime = nodesSearchTimes.get(nodeNumber)
         if (typeof nodeSearchTime === "undefined") {
             continue
