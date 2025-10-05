@@ -9,19 +9,61 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin25(inputs:string[]) {
     let currentLine = 0
+    const listOfCountsOfIslands: number[] = []
     while (inputs[currentLine] != "0 0") {
         const [W, H] = parseSpaceSeparatedLineToNumberArray(inputs[currentLine])
 
         const islandsMap: number[][] = []
-        for (let lineInMap = currentLine + 1; lineInMap < currentLine + H + 1; lineInMap++) {
+        for (let lineInMap = currentLine + 1; lineInMap < currentLine + 1 + H; lineInMap++) {
             islandsMap.push(parseSpaceSeparatedLineToNumberArray(inputs[lineInMap]))
         }
 
-        // ここでdfsして解答を出力
-        console.log(W, H)
-        console.log(islandsMap)
+        // ここでdfs
+        const isMeshIsMarkedAsIslands = new Set<string>()
+        let countOfIslands = 0
+        for (let h = 0; h < H; h++) {
+            for (let w = 0; w < W; w++) {
+                if (islandsMap[h][w] !== 1 || isMeshIsMarkedAsIslands.has(convertPosToSetKey(h, w))) {
+                    continue
+                }
+                // markする
+                markMeshesInIslands(islandsMap, isMeshIsMarkedAsIslands, [h, w])
+                countOfIslands += 1
+            }
+           
+        }
+        listOfCountsOfIslands.push(countOfIslands)
 
         currentLine += H + 1
+    }
+
+    for (const countOfIslands of listOfCountsOfIslands) {
+        console.log(countOfIslands)
+    }
+
+    function markMeshesInIslands(islandsMap: number[][], isMeshIsMarkedAsIslands: Set<string>, startMeshPos: [number, number]) {
+        const [startMeshh, startMeshw] = startMeshPos
+        isMeshIsMarkedAsIslands.add(convertPosToSetKey(startMeshh, startMeshw))
+
+        const d = [0, 1, -1]
+        for (const dh of d) {
+            for (const dw of d) {
+                const [nexth, nextw] = [startMeshh + dh, startMeshw + dw]
+                if (nexth < 0 || nexth > islandsMap.length-1 ||
+                    nextw < 0 || nextw > islandsMap[0].length-1
+                ) {
+                    continue
+                }
+                if (islandsMap[nexth][nextw] !== 1 || isMeshIsMarkedAsIslands.has(convertPosToSetKey(nexth, nextw))) {
+                    continue
+                }
+                markMeshesInIslands(islandsMap, isMeshIsMarkedAsIslands, [nexth, nextw])
+            }
+        }
+    }
+
+    function convertPosToSetKey(h: number, w:number): string {
+        return `${h}-${w}`
     }
 }
 
