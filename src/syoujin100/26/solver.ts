@@ -9,10 +9,11 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin26(inputs:string[]) {
     const [N, Q] = parseSpaceSeparatedLineToNumberArray(inputs[0])
-    const edges: [number, number][] = []
+    const tree: number[][] = Array.from({length: N}, () => [])
     for (let lineNumber = 1; lineNumber < 1 + N - 1; lineNumber++) {
         const [a, b] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
-        edges.push([a, b])
+        tree[a].push(b)
+        tree[b].push(a)
     }
     const operations: [number, number][] = []
     for (let lineNumber = 1 + N - 1; lineNumber < inputs.length; lineNumber++) {
