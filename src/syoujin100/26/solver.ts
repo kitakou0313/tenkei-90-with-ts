@@ -22,6 +22,14 @@ function solveSyoujin26(inputs:string[]) {
         )
         operations.push([rootNodeOfTargetSubTree, incrementalValue])
     }
+
+    const nodesNotInSubTree = new Set<number>()
+    // 各ノードごとにそれを根とした時の部分木に属するノードをリストにする
+    function dfs(rootNode: number, tree: number[][]) {
+        for (const nextNode of tree[rootNode]) {
+            dfs(nextNode, tree)
+        }
+    }
 }
 
 const inputSyoujin26 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
