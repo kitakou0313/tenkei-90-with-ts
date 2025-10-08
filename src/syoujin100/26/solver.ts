@@ -12,31 +12,31 @@ function solveSyoujin26(inputs:string[]) {
     const tree: number[][] = Array.from({length: N}, () => [])
     for (let lineNumber = 1; lineNumber < 1 + N - 1; lineNumber++) {
         const [a, b] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
-        tree[a].push(b)
-        tree[b].push(a)
+        tree[a-1].push(b-1)
+        tree[b-1].push(a-1)
     }
     const operations: [number, number][] = []
     for (let lineNumber = 1 + N - 1; lineNumber < inputs.length; lineNumber++) {
         const [rootNodeOfTargetSubTree, incrementalValue] = parseSpaceSeparatedLineToNumberArray(
             inputs[lineNumber]
         )
-        operations.push([rootNodeOfTargetSubTree, incrementalValue])
+        operations.push([rootNodeOfTargetSubTree-1, incrementalValue])
     }
-
-    dfs(1, tree)
 
     const nodesWillNotInSubTree = new Set<number>()
     // 各ノードごとにそれを根とした時の部分木に属するノードをリストにする
     function dfs(rootNode: number, tree: number[][]) {
-        console.log(rootNode, nodesWillNotInSubTree)
+        console.log(rootNode, nodesWillNotInSubTree, tree)
         nodesWillNotInSubTree.add(rootNode)
         for (const nextNode of tree[rootNode]) {
-            if (nodesWillNotInSubTree.has(rootNode)) {
+            if (nodesWillNotInSubTree.has(nextNode)) {
                 continue
             }
             dfs(nextNode, tree)
         }
     }
+
+    dfs(0, tree)
 }
 
 const inputSyoujin26 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
