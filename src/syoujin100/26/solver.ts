@@ -23,10 +23,17 @@ function solveSyoujin26(inputs:string[]) {
         operations.push([rootNodeOfTargetSubTree, incrementalValue])
     }
 
-    const nodesNotInSubTree = new Set<number>()
+    dfs(1, tree)
+
+    const nodesWillNotInSubTree = new Set<number>()
     // 各ノードごとにそれを根とした時の部分木に属するノードをリストにする
     function dfs(rootNode: number, tree: number[][]) {
+        console.log(rootNode, nodesWillNotInSubTree)
+        nodesWillNotInSubTree.add(rootNode)
         for (const nextNode of tree[rootNode]) {
+            if (nodesWillNotInSubTree.has(rootNode)) {
+                continue
+            }
             dfs(nextNode, tree)
         }
     }
