@@ -15,12 +15,12 @@ function solveSyoujin26(inputs:string[]) {
         tree[a-1].push(b-1)
         tree[b-1].push(a-1)
     }
-    const operations: [number, number][] = []
+    const accumuratedSumArray: number[] = Array.from({length: N}, () => 0)
     for (let lineNumber = 1 + N - 1; lineNumber < inputs.length; lineNumber++) {
         const [rootNodeOfTargetSubTree, incrementalValue] = parseSpaceSeparatedLineToNumberArray(
             inputs[lineNumber]
         )
-        operations.push([rootNodeOfTargetSubTree-1, incrementalValue])
+        accumuratedSumArray[rootNodeOfTargetSubTree-1] += incrementalValue
     }
 
     const nodesWillNotInSubTree = new Set<number>()
