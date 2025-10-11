@@ -23,20 +23,24 @@ function solveSyoujin26(inputs:string[]) {
         accumuratedSumArray[rootNodeOfTargetSubTree-1] += incrementalValue
     }
 
-    const nodesWillNotInSubTree = new Set<number>()
     // 各ノードごとにそれを根とした時の部分木に属するノードをリストにする
-    function dfs(rootNode: number, tree: number[][]) {
-        console.log(rootNode, nodesWillNotInSubTree, tree)
-        nodesWillNotInSubTree.add(rootNode)
-        for (const nextNode of tree[rootNode]) {
-            if (nodesWillNotInSubTree.has(nextNode)) {
+    function dfs(rootNode: number, parentNode: number, tree: number[][], accumuratedSumArray: number[]) {
+        if (parentNode != -1) {
+            accumuratedSumArray[rootNode] += accumuratedSumArray[parentNode]
+        }
+        for (const connectedNode of tree[rootNode]) {
+            if (connectedNode === parentNode) {
                 continue
             }
-            dfs(nextNode, tree)
+            dfs(connectedNode, rootNode, tree, accumuratedSumArray)
         }
     }
 
-    dfs(0, tree)
+    dfs(0, -1, tree, accumuratedSumArray)
+
+    console.log(
+        accumuratedSumArray.join(" ")
+    )
 }
 
 const inputSyoujin26 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
