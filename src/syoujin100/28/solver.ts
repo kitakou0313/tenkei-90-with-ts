@@ -36,12 +36,40 @@ function solveSyoujin28(inputs:string[]) {
     const graph: number[][] = Array.from({length: N}, () => [])
     for (let lineNumber = 1; lineNumber < inputs.length; lineNumber++) {
         const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
-        const nodeNumber = parsedLine[0]
+        const nodeNumber = parsedLine[0] - 1
         const connectedNodes = parsedLine.slice(2)
         graph[nodeNumber].push(...connectedNodes)
     }
 
+    const nodeAndLeastDistanceMap = new Map<number, number>([[0, 0]])
+    const queue = new Queue<number>()
+    const nodesAddedToQueueSet = new Set<number>()
 
+    // はばたん
+    queue.push(0)
+    nodesAddedToQueueSet.add(0)
+
+    while (queue.getLength() !== 0) {
+        const currentNode = queue.pop()
+        if (typeof currentNode === "undefined") {
+            break
+        }
+
+        for (const nextNode of graph[currentNode]) {
+            const leastDistanceOfCurrentNode = nodeAndLeastDistanceMap.get(currentNode)
+            if (typeof leastDistanceOfCurrentNode === "undefined") {
+                break // 例外を投げるべき
+            }
+            nodeAndLeastDistanceMap.set(nextNode, leastDistanceOfCurrentNode + 1)
+
+            queue.push(nextNode)
+            nodesAddedToQueueSet.add(nextNode)
+        }
+    }
+
+    for (const [nodeIndexInGraphArray, leastDistance] of nodeAndLeastDistanceMap) {
+        console.log('%d %d', nodeIndexInGraphArray + 1, leastDistance)
+    }
     
 }
 
