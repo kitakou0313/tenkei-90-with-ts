@@ -18,7 +18,10 @@ function solveSyoujin28(inputs:string[]) {
             this.rear += 1
         }
 
-        pop(): T {
+        pop(): T | undefined {
+            if (this.getLength() === 0) {
+                return undefined
+            }
             const currentFrontItem = this.items[this.front]
             this.front += 1
             return currentFrontItem
