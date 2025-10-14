@@ -38,7 +38,7 @@ function solveSyoujin28(inputs:string[]) {
         const parsedLine = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
         const nodeNumber = parsedLine[0] - 1
         const connectedNodes = parsedLine.slice(2)
-        graph[nodeNumber].push(...connectedNodes)
+        graph[nodeNumber].push(...(connectedNodes.map((value) => value - 1)))
     }
 
     const nodeAndLeastDistanceMap = new Map<number, number>([[0, 0]])
@@ -52,23 +52,26 @@ function solveSyoujin28(inputs:string[]) {
     while (queue.getLength() !== 0) {
         const currentNode = queue.pop()
         if (typeof currentNode === "undefined") {
-            break
+            throw new Error("Current node is undefined")
         }
 
         for (const nextNode of graph[currentNode]) {
+            if (nodesAddedToQueueSet.has(nextNode)) {
+                continue
+            }
             const leastDistanceOfCurrentNode = nodeAndLeastDistanceMap.get(currentNode)
             if (typeof leastDistanceOfCurrentNode === "undefined") {
-                break // 例外を投げるべき
+                throw new Error("leastDistanceOfCurrentNode is undefined")
             }
             nodeAndLeastDistanceMap.set(nextNode, leastDistanceOfCurrentNode + 1)
-
             queue.push(nextNode)
             nodesAddedToQueueSet.add(nextNode)
         }
     }
 
-    for (const [nodeIndexInGraphArray, leastDistance] of nodeAndLeastDistanceMap) {
-        console.log('%d %d', nodeIndexInGraphArray + 1, leastDistance)
+    for (let nodeNumberIndex = 0; nodeNumberIndex < N; nodeNumberIndex++) {
+        console.log('%d %d', nodeNumberIndex + 1, nodeAndLeastDistanceMap.get(nodeNumberIndex))
+        
     }
     
 }
