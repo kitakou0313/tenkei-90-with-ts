@@ -70,7 +70,7 @@ function solveSyoujin28(inputs:string[]) {
     }
 
     for (let nodeNumberIndex = 0; nodeNumberIndex < N; nodeNumberIndex++) {
-        console.log('%d %d', nodeNumberIndex + 1, nodeAndLeastDistanceMap.get(nodeNumberIndex))
+        console.log('%d %d', nodeNumberIndex + 1, typeof nodeAndLeastDistanceMap.get(nodeNumberIndex) == "undefined" ? -1 : nodeAndLeastDistanceMap.get(nodeNumberIndex))
         
     }
     
