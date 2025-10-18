@@ -54,10 +54,10 @@ function solveSyoujin29(inputs:string[]) {
     const dr = [0,0,1,-1]
     const dc = [1,-1,0,0]
 
-
     posToLeastDistanceMap.set(convertPosToKey(startR, startC), 0)
     queue.push(convertPosToKey(startR, startC))
     visitedPosSet.add(convertPosToKey(startR, startC))
+
     while (queue.getLength() !== 0) {
         const currentPosKey = queue.pop()
         if (typeof currentPosKey === "undefined") {
@@ -72,7 +72,8 @@ function solveSyoujin29(inputs:string[]) {
         for (let dIndex = 0; dIndex < 4; dIndex++) {
             const [nextR, nextC] = [currentR + dr[dIndex], currentC + dc[dIndex]]
             if (nextR < 0 || R-1 < nextR || nextC < 0 || C-1 < nextC ||
-                maze[nextR][nextC] !== ".") {
+                maze[nextR][nextC] !== "." || 
+                visitedPosSet.has(convertPosToKey(nextR, nextC))) {
                 continue
             }
 
@@ -82,6 +83,8 @@ function solveSyoujin29(inputs:string[]) {
 
         }
     }
+
+    console.log(posToLeastDistanceMap.get(convertPosToKey(goalR, goalC)))
 
 }
 
