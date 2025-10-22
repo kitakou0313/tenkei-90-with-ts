@@ -15,6 +15,15 @@ function solveSyoujin31(inputs:string[]) {
             inputs[lineNumber].split("")
         )
     }
+
+    const dw = [ 0, 1,1,1,0,-1]
+    const dh = [-1,-1,0,1,1, 0]
+
+    for (let w = 0; w < W; w++) {
+        for (let h = 0; h < H; h++) {
+        
+        }       
+    }
 }
 
 const inputSyoujin31 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
