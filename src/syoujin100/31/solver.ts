@@ -8,6 +8,11 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin31(inputs:string[]) {
+    function printGrid(grids: ("0" | "1")[][]) {
+        for (const line of grids) {
+            console.log(line.join(" "))
+        }
+    }
     function convertPosToStr(h:number, w:number): string {
         return `${h}-${w}`
     }
@@ -31,12 +36,12 @@ function solveSyoujin31(inputs:string[]) {
         }
     }
 
-    const dw = {
-        0: [ 0, 1, 1, 1, 0,-1],
-        1: [-1, 0, 1, 0,-1,-1]
+    const dw = { // x
+        0: [-1, 0, 1, 0,-1,-1],
+        1: [ 0, 1, 1, 1, 0,-1]
     }
     
-    const dh = {
+    const dh = { // y
         0: [-1,-1, 0, 1, 1, 0],
         1: [-1,-1, 0, 1, 1, 0]
     }
@@ -48,36 +53,35 @@ function solveSyoujin31(inputs:string[]) {
     })
 
     const visited = new Set<string>()
-    function bfs(h:number, w: number) {
-        if (visited.has(convertPosToStr(h, w))) {
-            return
-        }
+    function dfs(h:number, w: number) {
+        visited.add(convertPosToStr(h, w))
         if (grids[h][w] === "1") {
             return
         }
         gridsAfterMakingBuildings[h][w] = "0"
-        visited.add(convertPosToStr(h, w))
 
         for (let indexInd = 0; indexInd < 6; indexInd++) {
-            const nh = h + dh[indexInd]
-            const nw = w + dw[indexInd]
+            const nh = h + dh[(h % 2 === 0 ? 0 : 1)][indexInd]
+            const nw = w + dw[(h % 2 === 0 ? 0 : 1)][indexInd]
 
             if (nh < 0 || H + 1 < nh ||
                 nw < 0 || W + 1 < nw ||
                 grids[nh][nw] === "1") {
                 continue
             }
-            if (visited.has(convertPosToStr(h, w))) {
+            if (visited.has(convertPosToStr(nh, nw))) {
                 continue
             }
+            dfs(nh, nw)
         }
     }
     
-    for (let h = 0; h < H + 2; h++) {
-        for (let w = 0; w < W + 2; w++) {
-            bfs(h, w)
-        }
-    }
+    // 確定で外マスの(0, 0)からbfsする
+    dfs(0, 0)
+
+    printGrid(grids)
+    printGrid(gridsAfterMakingBuildings)
+
 
     // 建物マスと隣接する空き地マスの数を数える
     let countOfWalls = 0
@@ -86,10 +90,17 @@ function solveSyoujin31(inputs:string[]) {
             if (gridsAfterMakingBuildings[h][w] === "0") {
                 continue
             }
+            // (h, w)が1(建物マス)の時
 
             for (let indexInd = 0; indexInd < 6; indexInd++) {
-                const nh = h + dh[indexInd]
-                const nw = w + dw[indexInd]
+                const nh = h + dh[(h % 2 === 0 ? 0 : 1)][indexInd]
+                const nw = w + dw[(h % 2 === 0 ? 0 : 1)][indexInd]
+
+                if (nh < 0 || H + 1 < nh ||
+                    nw < 0 || W + 1 < nw) {
+                    continue
+                }
+
                 if (gridsAfterMakingBuildings[nh][nw] === "0") {
                     countOfWalls += 1
                 }
