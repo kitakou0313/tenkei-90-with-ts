@@ -79,10 +79,6 @@ function solveSyoujin31(inputs:string[]) {
     // 確定で外マスの(0, 0)からbfsする
     dfs(0, 0)
 
-    printGrid(grids)
-    printGrid(gridsAfterMakingBuildings)
-
-
     // 建物マスと隣接する空き地マスの数を数える
     let countOfWalls = 0
     for (let h = 0; h < H + 2; h++) {
