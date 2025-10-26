@@ -31,9 +31,6 @@ function solveSyoujin31(inputs:string[]) {
         }
     }
 
-    console.log(rawGrids)
-    console.log(grids)
-
     const dw = [ 0, 1,1,1,0,-1]
     const dh = [-1,-1,0,1,1, 0]
 
@@ -75,7 +72,27 @@ function solveSyoujin31(inputs:string[]) {
         }
     }
 
-    console.log(gridsAfterMakingBuildings)
+    // 建物マスと隣接する空き地マスの数を数える
+    let countOfWalls = 0
+    for (let h = 0; h < H + 2; h++) {
+        for (let w = 0; w < W + 2; w++) {
+            if (gridsAfterMakingBuildings[h][w] === "0") {
+                continue
+            }
+
+            for (let indexInd = 0; indexInd < 6; indexInd++) {
+                const nh = h + dh[indexInd]
+                const nw = w + dw[indexInd]
+                if (gridsAfterMakingBuildings[nh][nw] === "0") {
+                    countOfWalls += 1
+                }
+                
+            }
+        }
+        
+    }
+
+    console.log(countOfWalls)
 }
 
 const inputSyoujin31 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
