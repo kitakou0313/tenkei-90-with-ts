@@ -8,7 +8,17 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin32(inputs:string[]) {
-    const [W, H] = parseSpaceSeparatedLineToNumberArray(inputs[0])
+    let lineNumber = 0
+    let resList: number[] = []
+    while (inputs[lineNumber] !== "0 0") {
+        const [W, H] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
+
+
+    }
+
+    for (const res of resList) {
+        console.log(res)
+    }
 }
 
 const inputSyoujin32 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
