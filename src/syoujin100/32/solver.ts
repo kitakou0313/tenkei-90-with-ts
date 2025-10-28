@@ -8,12 +8,19 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin32(inputs:string[]) {
-    let lineNumber = 0
+    let lineNumberOfQuestionInputStart = 0
     let resList: number[] = []
-    while (inputs[lineNumber] !== "0 0") {
-        const [W, H] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
+    while (inputs[lineNumberOfQuestionInputStart] !== "0 0") {
+        const [W, H] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumberOfQuestionInputStart])
 
+        const maze: string[][] = []
+        for (let lineNumber = lineNumberOfQuestionInputStart + 1; lineNumber < lineNumberOfQuestionInputStart + 1 + 2*H - 1; lineNumber++) {
+            maze.push(inputs[lineNumber].split(""))
+            
+        }
 
+        lineNumberOfQuestionInputStart += 2 * H
+        console.log(maze)
     }
 
     for (const res of resList) {
