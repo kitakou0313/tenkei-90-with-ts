@@ -20,7 +20,14 @@ function solveSyoujin32(inputs:string[]) {
         }
 
         lineNumberOfQuestionInputStart += 2 * H
-        console.log(maze)
+        
+        // mazeからグラフを構成
+        for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+                
+            }
+            
+        }
     }
 
     for (const res of resList) {
