@@ -8,25 +8,48 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin32(inputs:string[]) {
+    function convertPosToKey([h, w]:[number, number]): string {
+        return `${h}-${w}`
+    }
+
     let lineNumberOfQuestionInputStart = 0
     let resList: number[] = []
     while (inputs[lineNumberOfQuestionInputStart] !== "0 0") {
         const [W, H] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumberOfQuestionInputStart])
 
-        const maze: string[][] = []
+        const mazeMap: string[][] = []
         for (let lineNumber = lineNumberOfQuestionInputStart + 1; lineNumber < lineNumberOfQuestionInputStart + 1 + 2*H - 1; lineNumber++) {
-            maze.push(inputs[lineNumber].split(""))
-            
+            mazeMap.push(inputs[lineNumber].split(""))
         }
 
         lineNumberOfQuestionInputStart += 2 * H
         
         // mazeからグラフを構成
-        for (let y = 0; y < H; y++) {
-            for (let x = 0; x < W; x++) {
-                
+        const graph = new Map<string, string[]>()
+        const dh: [number, number, number, number] = [ 0, 0, 1,-1]
+        const dw: [number, number, number, number] = [ 1,-1, 0, 0]
+        for (let squareh = 0; squareh < H; squareh++) {
+            for (let squarew = 0; squarew < W; squarew++) {
+                const hInMazeMap = squareh * 2
+                const wInMazeMap = squarew * 2
+
+                graph.set(convertPosToKey([squareh, squarew]), [])
+
+                for (let dInDhAndDw = 0; dInDhAndDw < 4; dInDhAndDw++) {
+                    const nextSquareh = (squareh + dh[dInDhAndDw]) * 2
+                    const nextSquarew = (squarew + dw[dInDhAndDw]) * 2
+
+                    const wallh = hInMazeMap + dh[dInDhAndDw]
+                    const wallw = wInMazeMap + dw[dInDhAndDw]
+
+                    if (mazeMap[wallh][wallw] === "0") {
+                        graph.get(convertPosToKey([squareh, squarew]))?.push(
+                            convertPosToKey([nextSquareh, nextSquarew])
+                        )
+                    }
+                    
+                }
             }
-            
         }
     }
 
