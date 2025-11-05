@@ -10,11 +10,25 @@ function parseFirstNumber(line: string): number {
 function solveSyoujin34(inputs:string[]) {
     const [ N ] = parseSpaceSeparatedLineToNumberArray(inputs[0])
 
-    function calcFibNum(params:type): number {
-        
+    function calcNthFibNum(n:number): number {
+        const nthFibNumMap = new Map<number, number>()
+        function helper(n:number): number {
+            if (n === 0 || n === 1) {
+                return 1
+            }
+            const nthFibNumInCache = nthFibNumMap.get(n)
+            if (typeof nthFibNumInCache !== "undefined") {
+                return nthFibNumInCache 
+            }
+            const nthFibNum = helper(n - 1) + helper(n - 2);
+            nthFibNumMap.set(n, nthFibNum)
+            return nthFibNum
+        }
+
+        return helper(n)
     }
 
-    console.log(calcFibNum(N))
+    console.log(calcNthFibNum(N))
 
 }
 
