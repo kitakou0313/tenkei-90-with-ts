@@ -10,13 +10,21 @@ function parseFirstNumber(line: string): number {
 function solveSyoujin35(inputs:string[]) {
     const [N, W] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const luggages: {value:number, weight:number}[] = []
-    for (let lineNumber = 1; lineNumber < inputs.length; lineNumber++) {
+    for (let lineNumber = 1; lineNumber < 1 + N; lineNumber++) {
         const [v, w] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
         luggages.push({
             value: v,
             weight:w
         })
     }
+
+    function calcMostValueSum(capacityOfKnapsack: number, luggages: {value:number, weight:number}[]): number {
+        const addedToKnapsackLuggagesSet = new Set<number>()
+        const weightToMostBiggestValue = new Map<se
+
+    }
+
+    console.log(calcMostValueSum(W, luggages))
 }
 
 const inputSyoujin35 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
