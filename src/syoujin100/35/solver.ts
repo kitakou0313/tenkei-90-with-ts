@@ -22,6 +22,14 @@ function solveSyoujin35(inputs:string[]) {
         const addedToKnapsackLuggagesSet = new Set<number>()
         const weightToMostBiggestValue = new Map<se
 
+        // 各荷物について、それを選んだ時と選ばなかった時の最大値をそれぞれ求め比較する
+        for (let luggagesIndex = 0; luggagesIndex < luggages.length; luggagesIndex++) {
+            
+            const valueOfSelectingCase
+            const valueOfNotSelectingCase
+            
+        }
+
     }
 
     console.log(calcMostValueSum(W, luggages))
