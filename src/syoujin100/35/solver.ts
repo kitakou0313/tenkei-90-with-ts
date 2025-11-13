@@ -18,18 +18,31 @@ function solveSyoujin35(inputs:string[]) {
         })
     }
 
-    function calcMostValueSum(capacityOfKnapsack: number, luggages: {value:number, weight:number}[]): number {
-        const addedToKnapsackLuggagesSet = new Set<number>()
-        const weightToMostBiggestValue = new Map<se
+    function solveWithBottomUpDP(W:number, luggages: {value:number, weight:number}[]) {
+        const N = luggages.length
 
-        // 各荷物について、それを選んだ時と選ばなかった時の最大値をそれぞれ求め比較する
-        for (let luggagesIndex = 0; luggagesIndex < luggages.length; luggagesIndex++) {
-            
-            const valueOfSelectingCase
-            const valueOfNotSelectingCase
+        // dp[i][w] = 容量wに対して荷物の最初のi個を利用した時の価値の最大値
+        const dp: number[][] = Array(N + 1).fill(0).map(() => Array(W + 1).fill(0))
+
+        for (let n = 0; n < N + 1; n++) {
+            const currentLuggage = luggages[n]
+
+            for (let w = 0; w < W + 1; w++) {
+                
+                // currentLuggageを使うケース
+                let valueInCaseUsingCurrentLuggage = - 1
+                if (currentLuggage.weight <= w) {
+                    valueInCaseUsingCurrentLuggage = dp[n - 1][w - currentLuggage.weight]
+                }
+                // currentLuggageを使わないケース
+                const valueInCaseNotUsingCurrentLuggage = dp[n][w] = dp[n - 1][w]
+
+                dp[n][w] = Math.max(
+                    valueInCaseUsingCurrentLuggage, valueInCaseNotUsingCurrentLuggage
+                )
+            }
             
         }
-
     }
 
     console.log(calcMostValueSum(W, luggages))
