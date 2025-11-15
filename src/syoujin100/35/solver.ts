@@ -24,15 +24,15 @@ function solveSyoujin35(inputs:string[]) {
         // dp[i][w] = 容量wに対して荷物の最初のi個を利用した時の価値の最大値
         const dp: number[][] = Array(N + 1).fill(0).map(() => Array(W + 1).fill(0))
 
-        for (let n = 0; n < N + 1; n++) {
-            const currentLuggage = luggages[n]
+        for (let n = 1; n < N + 1; n++) {
+            const currentLuggage = luggages[n-1]
 
             for (let w = 0; w < W + 1; w++) {
                 
                 // currentLuggageを使うケース
                 let valueInCaseUsingCurrentLuggage = - 1
                 if (currentLuggage.weight <= w) {
-                    valueInCaseUsingCurrentLuggage = dp[n - 1][w - currentLuggage.weight]
+                    valueInCaseUsingCurrentLuggage = dp[n - 1][w - currentLuggage.weight] + currentLuggage.value
                 }
                 // currentLuggageを使わないケース
                 const valueInCaseNotUsingCurrentLuggage = dp[n][w] = dp[n - 1][w]
@@ -43,9 +43,11 @@ function solveSyoujin35(inputs:string[]) {
             }
             
         }
+
+        return dp[N][W]
     }
 
-    console.log(calcMostValueSum(W, luggages))
+    console.log(solveWithBottomUpDP(W, luggages))
 }
 
 const inputSyoujin35 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
