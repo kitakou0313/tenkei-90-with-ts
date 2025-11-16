@@ -16,6 +16,17 @@ function solveSyoujin36(inputs:string[]) {
 
     function calcMaxValue(luggages: {value:number, weight:number}[], W:number): number {
         const dp: number[] = []
+
+        // Wでの最大の価値を算出
+        function calcMaxValueWithW(luggages: {value:number, weight:number}[], W:number): number {
+            
+            for (let luggagesIndex = 0; luggagesIndex < luggages.length; luggagesIndex++) {
+                const element = luggages[luggagesIndex];
+                
+            }
+        }
+
+        return calcMaxValueWithW(luggages, W)
     }
 
     console.log(calcMaxValue(luggages, W))
