@@ -21,17 +21,19 @@ function solveSyoujin36(inputs:string[]) {
             
             let maximumValue = 0
             for (let luggagesIndex = 0; luggagesIndex < luggages.length; luggagesIndex++) {
-                const currentLuggages = luggages[luggagesIndex];
+                const currentLuggage = luggages[luggagesIndex];
 
-                if (currentLuggages.weight <= W) {
-
+                if (currentLuggage.weight <= W) {
+                    const newValue = dp[W - currentLuggage.weight] + currentLuggage.value
+                    maximumValue = Math.max(maximumValue, newValue)
                 }
 
                 maximumValue = Math.max(maximumValue)
-                
             }
 
             dp[W] = maximumValue
+
+            return dp[W]
         }
 
         return calcMaxValueWithW(luggages, maxW)
