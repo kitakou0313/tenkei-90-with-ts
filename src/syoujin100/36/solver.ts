@@ -12,28 +12,26 @@ function solveSyoujin36(inputs:string[]) {
     const luggages: {value:number, weight:number}[] = []
     for (let lineNumber = 1; lineNumber < inputs.length; lineNumber++) {
         const [vi, wi] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
+        luggages.push({value:vi, weight:wi})
     }
 
     function calcMaxValue(luggages: {value:number, weight:number}[], maxW:number): number {
         const dp: number[] = Array.from({length:maxW + 1}, () => 0)
         // Wでの最大の価値を算出
-        function calcMaxValueWithW(luggages: {value:number, weight:number}[], W:number): number {
-            
-            let maximumValue = 0
-            for (let luggagesIndex = 0; luggagesIndex < luggages.length; luggagesIndex++) {
-                const currentLuggage = luggages[luggagesIndex];
-
-                if (currentLuggage.weight <= W) {
-                    const newValue = dp[W - currentLuggage.weight] + currentLuggage.value
-                    maximumValue = Math.max(maximumValue, newValue)
+        function calcMaxValueWithW(luggages: {value:number, weight:number}[], maxW:number): number {
+            for (let w = 1; w < maxW+1; w++) {
+                let maximumValue = 0
+                for (let luggagesIndex = 0; luggagesIndex < luggages.length; luggagesIndex++) {
+                    const currentLuggage = luggages[luggagesIndex];
+                    if (currentLuggage.weight <= w) {
+                        const newValue = dp[w - currentLuggage.weight] + currentLuggage.value
+                        maximumValue = Math.max(maximumValue, newValue)
+                    }
                 }
-
-                maximumValue = Math.max(maximumValue)
+                dp[w] = maximumValue
             }
 
-            dp[W] = maximumValue
-
-            return dp[W]
+            return dp[maxW]
         }
 
         return calcMaxValueWithW(luggages, maxW)
