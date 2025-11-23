@@ -12,26 +12,34 @@ function solveSyoujin37(inputs:string[]) {
     const coins = parseSpaceSeparatedLineToNumberArray(inputs[1])
 
     function calcMinCoinNumber(coins: number[], trgValue:number):number {
-        console.log(trgValue)
-        if (trgValue === 1) {
-            return 1
-        }
-        if(trgValue === 0){
-            return 0
-        }
-
-        let minCoinNum = Number.MAX_SAFE_INTEGER
-        for (const coin of coins) {
-            if (coin > trgValue) {
-                continue
+        const dp: number[] = Array.from({length:trgValue + 1}, () => Number.MAX_SAFE_INTEGER)
+        dp[0] = 0
+        dp[1] = 1
+        function helper(coins: number[], trgValue:number): number {
+            let minCoinNum = Number.MAX_SAFE_INTEGER
+            for (const coin of coins) {
+                if (coin > trgValue) {
+                    continue
+                }
+                console.log(trgValue - coin, dp[trgValue - coin] !== Number.MAX_SAFE_INTEGER)
+                if (dp[trgValue - coin] !== Number.MAX_SAFE_INTEGER) {
+                    minCoinNum = Math.min(
+                        minCoinNum,
+                        1 + dp[trgValue - coin]
+                    )
+                    continue
+                }
+                minCoinNum = Math.min(
+                    minCoinNum,
+                    1 + helper(coins, trgValue - coin)
+                )
             }
-            minCoinNum = Math.min(
-                minCoinNum,
-                1 + calcMinCoinNumber(coins, trgValue - coin)
-            )
+            dp[trgValue] = minCoinNum
+
+            return minCoinNum
         }
 
-        return minCoinNum
+        return helper(coins, trgValue)
     }
 
     console.log(calcMinCoinNumber(coins, n))
