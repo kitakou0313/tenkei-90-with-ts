@@ -9,28 +9,32 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin38(inputs:string[]) {
     function calcLengthOfLCS(X:string, Y:string): number {
-        let mostLengthOfLCS = Number.MIN_SAFE_INTEGER
+        const m = X.length
+        const n = Y.length
 
-        for (let indexInX = 0; indexInX < X.length; indexInX++) {
-            for (let indexInY = 0; indexInY < Y.length; indexInY++) {
-                let indexOfCS = 0
-                
-                while (typeof X[indexInX + indexOfCS] !== "undefined" && typeof Y[indexInY + indexOfCS] !== "undefined" && 
-                    X[indexInX + indexOfCS] === Y[indexInY + indexOfCS] ) {
-                    indexOfCS += 1
+        // dp[i][j]...i文字目とj文字目までのLCS
+        const dp: number[][] = Array.from({length:m}, () => {
+            return Array.from({length:n}, () => 0)
+        })
+
+        let maxLength = 0;
+
+        for (let i = 1; i < m+1; i++) {
+            for (let j = 1; j < n+1; j++) {
+                if (X[i-1] === Y[j-1]) {
+                    dp[i][j] = dp[i-1][j-1]+1
+                    maxLength = Math.max(maxLength, dp[i][j])
                 }
-                console.log(indexOfCS, X, Y, X[indexInX + indexOfCS], Y[indexInY + indexOfCS])
-
-                mostLengthOfLCS = Math.max(mostLengthOfLCS, indexOfCS)
+                
             }
+            
         }
-
-        return mostLengthOfLCS
+        return maxLength
     }
     const N = parseFirstNumber(inputs[0])
 
     const ansList: number[] = []
-    for (let datasetNumber = 1; datasetNumber <= N; datasetNumber++) {
+    for (let datasetNumber = 1; datasetNumber < N + 1; datasetNumber++) {
         const X = inputs[2 * (datasetNumber-1) + 1]
         const Y = inputs[2 * (datasetNumber-1) + 2]
         
