@@ -9,27 +9,26 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin38(inputs:string[]) {
     function calcLengthOfLCS(X:string, Y:string): number {
-        const m = X.length
-        const n = Y.length
+        const M = X.length
+        const N = Y.length
 
         // dp[i][j]...i文字目とj文字目までのLCS
-        const dp: number[][] = Array.from({length:m}, () => {
-            return Array.from({length:n}, () => 0)
+        const dp: number[][] = Array.from({length:M+1}, () => {
+            return Array.from({length:N+1}, () => 0)
         })
 
-        let maxLength = 0;
-
-        for (let i = 1; i < m+1; i++) {
-            for (let j = 1; j < n+1; j++) {
+        for (let i = 1; i < M+1; i++) {
+            for (let j = 1; j < N+1; j++) {
                 if (X[i-1] === Y[j-1]) {
-                    dp[i][j] = dp[i-1][j-1]+1
-                    maxLength = Math.max(maxLength, dp[i][j])
+                    dp[i][j] = Math.max(dp[i - 1][j - 1] + 1,dp[i - 1][j],dp[i][j - 1]);
+                }else{
+                    dp[i][j] = Math.max(dp[i - 1][j],dp[i][j - 1]);
                 }
                 
             }
             
         }
-        return maxLength
+        return dp[M][N]
     }
     const N = parseFirstNumber(inputs[0])
 
