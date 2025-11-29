@@ -9,18 +9,24 @@ function parseFirstNumber(line: string): number {
 
 function solveSyoujin38(inputs:string[]) {
     function calcMaximumLCSLengthByRecursive(X:string, Y:string):number {
+        const memo: Map<string, number> = new Map()
+        
         function helper(i: number, j: number):number {
             const M = X.length
             const N = Y.length
 
+            const key = `${i}-${j}`
+            const resInMemo = memo.get(key)
+            if (typeof resInMemo !== "undefined") {
+                return resInMemo
+            }
+            
             if (i === M || j == N) {
                 return 0
             }
-
             if (X[i] === Y[j]) {
                 return 1 + helper(i + 1, j + 1);
             }
-
             return Math.max(
                 helper(i + 1, j),
                 helper(i, j + 1)
