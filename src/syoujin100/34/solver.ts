@@ -10,6 +10,18 @@ function parseFirstNumber(line: string): number {
 function solveSyoujin34(inputs:string[]) {
     const [ N ] = parseSpaceSeparatedLineToNumberArray(inputs[0])
 
+    function calcNthFibNumWithBottomUpDP(N:number): number {
+        const dp: number[] = Array.from({length:N+1}, () => 0)
+        dp[0] = 1
+        dp[1] = 1
+
+        for (let fibNumIndex = 2; fibNumIndex < N + 1; fibNumIndex++) {
+            dp[fibNumIndex] = dp[fibNumIndex - 1] + dp[fibNumIndex - 2] 
+        }
+
+        return dp[N]
+    }
+
     function calcNthFibNum(n:number): number {
         const nthFibNumMap = new Map<number, number>()
         function helper(n:number): number {
