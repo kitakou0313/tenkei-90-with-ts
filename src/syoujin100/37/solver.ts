@@ -11,6 +11,25 @@ function solveSyoujin37(inputs:string[]) {
     const [n, m] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const coins = parseSpaceSeparatedLineToNumberArray(inputs[1])
 
+    function calcMinCoinNumberWithBottomupDP(coins: number[], trgValue:number): number {
+        const dp: number[] = Array.from({length: trgValue + 1}, () => Number.MAX_SAFE_INTEGER)
+        dp[0] = 0
+
+        for (let value = 1; value < trgValue + 1; value++) {
+            for (let coinIndex = 0; coinIndex < coins.length; coinIndex++) {
+                const currentCoin = coins[coinIndex]
+                if (currentCoin > value) {
+                    continue
+                }
+
+                dp[value] = Math.min(dp[value], dp[value - currentCoin] + 1)
+
+            }
+        }
+        
+        return dp[trgValue]
+    }
+
     function calcMinCoinNumber(coins: number[], trgValue:number):number {
         const dp: number[] = Array.from({length:trgValue + 1}, () => Number.MAX_SAFE_INTEGER)
         dp[0] = 0
@@ -42,7 +61,7 @@ function solveSyoujin37(inputs:string[]) {
         return helper(coins, trgValue)
     }
 
-    console.log(calcMinCoinNumber(coins, n))
+    console.log(calcMinCoinNumberWithBottomupDP(coins, n))
 }
 
 const inputSyoujin37 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
