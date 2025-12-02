@@ -15,6 +15,24 @@ function solveSyoujin36(inputs:string[]) {
         luggages.push({value:vi, weight:wi})
     }
 
+    function calcMaxValueWithBottomUpDP(luggages: {value:number, weight:number}[], maxW:number): number {
+        const dp: number[] = Array.from({length: maxW + 1}, () => 0)
+        dp[0] = 0
+
+        for (let w = 0; w < maxW + 1; w++) {
+            let maximumValue = Number.MIN_SAFE_INTEGER
+            for (let luggageIndex = 0; luggageIndex < luggages.length; luggageIndex++) {
+                const currentLuggage = luggages[luggageIndex]
+                const valueWithCurrentLuggage = currentLuggage.value + dp[w - currentLuggage.weight]
+                maximumValue = Math.max(maximumValue, valueWithCurrentLuggage)
+            }
+
+            dp[w] = Math.max(dp[w], maximumValue)
+        }
+
+        return dp[maxW]
+    }
+
     function calcMaxValue(luggages: {value:number, weight:number}[], maxW:number): number {
         const dp: number[] = Array.from({length:maxW + 1}, () => 0)
         // Wでの最大の価値を算出
@@ -37,7 +55,7 @@ function solveSyoujin36(inputs:string[]) {
         return calcMaxValueWithW(luggages, maxW)
     }
 
-    console.log(calcMaxValue(luggages, W))
+    console.log(calcMaxValueWithBottomUpDP(luggages, W))
 }
 
 const inputSyoujin36 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
