@@ -21,30 +21,22 @@ function solveSyoujin35(inputs:string[]) {
     function solveWithBottomUpDP(W:number, luggages: {value:number, weight:number}[]) {
         const N = luggages.length
 
-        // dp[i][w] = 容量wに対して荷物の最初のi個を利用した時の価値の最大値
-        const dp: number[][] = Array(N + 1).fill(0).map(() => Array(W + 1).fill(0))
+        const dp: number[][] = Array.from({length : W + 1},() => Array.from({length: N + 1}, () => 0))
 
-        for (let n = 1; n < N + 1; n++) {
-            const currentLuggage = luggages[n-1]
+        for (let w = 0; w < W+1; w++) {
+            for (let n = 1; n < N+1; n++) {
+                const nthLuggage = luggages[n-1]
+                // 荷物を使う時の価値の最大値
+                const valueWithNthLuggages = w-nthLuggage.weight >= 0 ? dp[w-nthLuggage.weight][n-1]+nthLuggage.value : Number.MIN_SAFE_INTEGER
+                // 荷物を使わない時の価値の最大値
+                const valueWithOutNthLuggages = dp[w][n-1]
 
-            for (let w = 0; w < W + 1; w++) {
+                dp[w][n] = Math.max(valueWithNthLuggages, valueWithOutNthLuggages)
                 
-                // currentLuggageを使うケース
-                let valueInCaseUsingCurrentLuggage = - 1
-                if (currentLuggage.weight <= w) {
-                    valueInCaseUsingCurrentLuggage = dp[n - 1][w - currentLuggage.weight] + currentLuggage.value
-                }
-                // currentLuggageを使わないケース
-                const valueInCaseNotUsingCurrentLuggage = dp[n][w] = dp[n - 1][w]
-
-                dp[n][w] = Math.max(
-                    valueInCaseUsingCurrentLuggage, valueInCaseNotUsingCurrentLuggage
-                )
             }
-            
         }
 
-        return dp[N][W]
+        return dp[W][N]
     }
 
     console.log(solveWithBottomUpDP(W, luggages))
