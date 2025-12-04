@@ -8,6 +8,23 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin38(inputs:string[]) {
+    function calcLengthOfLCSWithBottomUpDP(X:string, Y:string): number {
+        const lengthOfX = X.length
+        const lengthOfY = Y.length
+
+        const dp: number[][] = Array.from({length:lengthOfX + 1}, () => Array.from({length:lengthOfY + 1}, () => 0))
+        for (let charNumberInX = 1; charNumberInX < lengthOfX+1; charNumberInX++) {
+            for (let charNumberInY = 1; charNumberInY < lengthOfY+1; charNumberInY++) {
+                if (X[charNumberInX-1] === Y[charNumberInY-1]) {
+                    dp[charNumberInX][charNumberInY] = dp[charNumberInX-1][charNumberInY-1] + 1
+                }else{
+                    dp[charNumberInX][charNumberInY] = dp[charNumberInX-1][charNumberInY-1]
+                }
+            }
+        }
+
+        return dp[lengthOfX][lengthOfY]
+    }
     function calcMaximumLCSLengthByRecursive(X:string, Y:string):number {
         const memo: Map<string, number> = new Map()
         
@@ -66,7 +83,7 @@ function solveSyoujin38(inputs:string[]) {
         const X = inputs[2 * (datasetNumber-1) + 1]
         const Y = inputs[2 * (datasetNumber-1) + 2]
         
-        ansList.push(calcLengthOfLCS(X, Y))
+        ansList.push(calcLengthOfLCSWithBottomUpDP(X, Y))
     }
 
     for (const ans of ansList) {
