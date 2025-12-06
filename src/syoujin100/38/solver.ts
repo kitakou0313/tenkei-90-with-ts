@@ -16,9 +16,10 @@ function solveSyoujin38(inputs:string[]) {
         for (let charNumberInX = 1; charNumberInX < lengthOfX+1; charNumberInX++) {
             for (let charNumberInY = 1; charNumberInY < lengthOfY+1; charNumberInY++) {
                 if (X[charNumberInX-1] === Y[charNumberInY-1]) {
+                    // 0-1ナップサックだとここでcharNumberInX, Y番目を採用するかしないかの判定が挟まるが、LCSの場合は常に採用した方が大きいので挟まらない
                     dp[charNumberInX][charNumberInY] = dp[charNumberInX-1][charNumberInY-1] + 1
                 }else{
-                    dp[charNumberInX][charNumberInY] = dp[charNumberInX-1][charNumberInY-1]
+                    dp[charNumberInX][charNumberInY] = Math.max(dp[charNumberInX][charNumberInY-1],dp[charNumberInX-1][charNumberInY] )
                 }
             }
         }
