@@ -13,40 +13,25 @@ function solveSyoujin39(inputs:string[]) {
 
     const numberOfSpaceCanSetOperator = N-1-1
 
-    const dp: number[][][] = Array.from({length : numberOfSpaceCanSetOperator + 1}, // 演算子を入れられる空白の数(N-1-1) + 初期状態の0用の1
-        () => Array.from({length:2}, () => Array.from({length:2}, () => numbers[0])))
+    const dp = Array.from({length:numberOfSpaceCanSetOperator+1}, () => {
+        return Array.from({length:20+1}, () => 0)
+    })
+    dp[0][numbers[0]] = 1
 
     for (let currentSpaceNumber = 1; currentSpaceNumber < numberOfSpaceCanSetOperator+1; currentSpaceNumber++) {
-        // 0 -> +, 1 -> - を指す
-        for (let operatorInCurrentSpace = 0; operatorInCurrentSpace < 2; operatorInCurrentSpace++) {
-            for (let operatorInSpaceBeforeCurrentSpace = 0; operatorInSpaceBeforeCurrentSpace < 2; operatorInSpaceBeforeCurrentSpace++) {
-                for (let operatorInSpaceBeforeBeforeCurrentSpace = 0; operatorInSpaceBeforeBeforeCurrentSpace < 2; operatorInSpaceBeforeBeforeCurrentSpace++) {
-                    let resOfOperation = Number.MAX_SAFE_INTEGER
-                    const resOfSubProblem = dp[currentSpaceNumber-1][operatorInSpaceBeforeCurrentSpace][operatorInSpaceBeforeBeforeCurrentSpace]
-                    if(isNaN(resOfSubProblem)){
-                        if (operatorInCurrentSpace === 0) {
-                            resOfOperation = resOfSubProblem + numbers[currentSpaceNumber]
-                        }else{
-                            resOfOperation = resOfSubProblem - numbers[currentSpaceNumber]
-                        }
-                        dp[currentSpaceNumber][operatorInCurrentSpace][operatorInSpaceBeforeCurrentSpace] = resOfOperation >= 0 && resOfOperation <= 20 ? resOfOperation : Number.NaN
-                    }else{
-                        dp[currentSpaceNumber][operatorInCurrentSpace][operatorInSpaceBeforeCurrentSpace] = Number.NaN
-                    }
-                }
+        for (let targetValue = 0; targetValue < 21; targetValue++) {
+            // +を入れるケース
+            if (targetValue-numbers[currentSpaceNumber] >= 0 && targetValue-numbers[currentSpaceNumber] <= 20) {
+                dp[currentSpaceNumber][targetValue] += dp[currentSpaceNumber-1][targetValue-numbers[currentSpaceNumber]]
+            }
+            // -を入れるケース
+            if (targetValue+numbers[currentSpaceNumber] >= 0 && targetValue+numbers[currentSpaceNumber] <= 20) {
+                dp[currentSpaceNumber][targetValue] += dp[currentSpaceNumber-1][targetValue+numbers[currentSpaceNumber]]
             }
         }
     }
 
-    console.log(dp)
-    let countOfValidExpression = 0
-    for (let operatorNumberOfLast = 0; operatorNumberOfLast < 2; operatorNumberOfLast++) {
-        for (let operatorNumberOfSecondToLast = 0; operatorNumberOfSecondToLast < 2; operatorNumberOfSecondToLast++) {
-            countOfValidExpression += dp[N-1-1][operatorNumberOfLast][operatorNumberOfSecondToLast] == numbers[N-1] ? 1 : 0
-        }
-    }
-
-    console.log(countOfValidExpression)
+    console.log(dp[numberOfSpaceCanSetOperator][numbers[N-1]])
 }
 
 const inputSyoujin39 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
