@@ -14,9 +14,9 @@ function solveSyoujin39(inputs:string[]) {
     const numberOfSpaceCanSetOperator = N-1-1
 
     const dp = Array.from({length:numberOfSpaceCanSetOperator+1}, () => {
-        return Array.from({length:20+1}, () => 0)
+        return Array.from({length:20+1}, () => 0n)
     })
-    dp[0][numbers[0]] = 1
+    dp[0][numbers[0]] = 1n
 
     for (let currentSpaceNumber = 1; currentSpaceNumber < numberOfSpaceCanSetOperator+1; currentSpaceNumber++) {
         for (let targetValue = 0; targetValue < 21; targetValue++) {
@@ -31,7 +31,7 @@ function solveSyoujin39(inputs:string[]) {
         }
     }
 
-    console.log(dp[numberOfSpaceCanSetOperator][numbers[N-1]])
+    console.log(dp[numberOfSpaceCanSetOperator][numbers[N-1]].toString())
 }
 
 const inputSyoujin39 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
