@@ -20,8 +20,9 @@ function solveSyoujin40(inputs:string[]) {
             day:Ai,
             pastaType: Bi as 1 | 2 | 3
         })
-        
     }
+
+    const dp: number[][] = Array.from({length:N+1},() => Array.from({length:3}, () => 0))
 }
 
 const inputSyoujin40 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
