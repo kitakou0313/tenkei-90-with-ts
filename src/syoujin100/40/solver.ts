@@ -8,6 +8,7 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin40(inputs:string[]) {
+    const MOD = 10000n
     type PastaSchedule = {
         day: number, 
         pastaType: 1 | 2 | 3
@@ -22,7 +23,13 @@ function solveSyoujin40(inputs:string[]) {
         })
     }
 
-    const dp: number[][] = Array.from({length:N+1},() => Array.from({length:3}, () => 0))
+    const dp: bigint[][] = Array.from({length:N+1},() => Array.from({length:3}, () => 0n))
+
+    let ans = 0n
+
+
+    console.log((ans % MOD).toString())
+
 }
 
 const inputSyoujin40 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
