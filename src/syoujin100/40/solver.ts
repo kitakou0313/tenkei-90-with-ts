@@ -23,7 +23,7 @@ function solveSyoujin40(inputs:string[]) {
     for (let k = 0; k < K+1; k++) {
         const [Ai, Bi] = parseSpaceSeparatedLineToNumberArray(inputs[1+k])
         if (!isPastaTypeValue(Bi)){
-            process.exit(1)
+            throw new Error("Biの値が1 ~ 3以外")
         }
         pastaSchduleList.push({
             day:Ai,
@@ -33,9 +33,7 @@ function solveSyoujin40(inputs:string[]) {
 
     const dp: bigint[][] = Array.from({length:N+1},() => Array.from({length:3}, () => 0n))
     
-
     let ans = 0n
-
 
     console.log((ans % MOD).toString())
 
