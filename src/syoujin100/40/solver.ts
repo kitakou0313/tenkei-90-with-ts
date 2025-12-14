@@ -8,6 +8,11 @@ function parseFirstNumber(line: string): number {
 }
 
 function solveSyoujin40(inputs:string[]) {
+    function isPastaTypeValue(value: number): value is 1 | 2 | 3 {
+        const pastaTypeValues = new Set([1,2,3])
+        return pastaTypeValues.has(value)
+    }
+
     const MOD = 10000n
     type PastaSchedule = {
         day: number, 
@@ -17,13 +22,17 @@ function solveSyoujin40(inputs:string[]) {
     const pastaSchduleList: PastaSchedule[] = []
     for (let k = 0; k < K+1; k++) {
         const [Ai, Bi] = parseSpaceSeparatedLineToNumberArray(inputs[1+k])
+        if (!isPastaTypeValue(Bi)){
+            process.exit(1)
+        }
         pastaSchduleList.push({
             day:Ai,
-            pastaType: Bi as 1 | 2 | 3
+            pastaType: Bi
         })
     }
 
     const dp: bigint[][] = Array.from({length:N+1},() => Array.from({length:3}, () => 0n))
+    
 
     let ans = 0n
 
