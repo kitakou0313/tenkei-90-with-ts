@@ -31,7 +31,8 @@ function solveSyoujin40(inputs:string[]) {
         })
     }
 
-    const dp: bigint[][] = Array.from({length:N+1},() => Array.from({length:3}, () => 0n))
+    // dp[n][a][b][c] = n日目についてパスタa、n-1日目にパスタ[b]、n-2日目にパスタcを選んだ時の総数
+    const dp: bigint[][][][] = Array.from({length:N+1},() => Array.from({length:3}, () => Array.from({length:3}, () => Array.from({length:3}, () => 0n))))
     
     let ans = 0n
 
