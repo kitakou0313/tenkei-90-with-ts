@@ -19,21 +19,27 @@ function solveSyoujin40(inputs:string[]) {
         pastaType: 1 | 2 | 3
     }
     const [N, K] = parseSpaceSeparatedLineToNumberArray(inputs[0])
-    const pastaSchduleList: PastaSchedule[] = []
+    const pastaSchduleDict = new Map<number, PastaSchedule>()
     for (let k = 0; k < K+1; k++) {
         const [Ai, Bi] = parseSpaceSeparatedLineToNumberArray(inputs[1+k])
         if (!isPastaTypeValue(Bi)){
             throw new Error("Biの値が1 ~ 3以外")
         }
-        pastaSchduleList.push({
-            day:Ai,
-            pastaType: Bi
-        })
+        pastaSchduleDict.set(Ai, {day:Ai, pastaType: Bi})
     }
 
-    // dp[n][a][b][c] = n日目についてパスタa、n-1日目にパスタ[b]、n-2日目にパスタcを選んだ時の総数
-    const dp: bigint[][][][] = Array.from({length:N+1},() => Array.from({length:3}, () => Array.from({length:3}, () => Array.from({length:3}, () => 0n))))
-    
+    // dp[n][a][b]
+    const dp: bigint[][][] = Array.from({length:N+1},() => Array.from({length:3}, () => Array.from({length:2}, () => 0n)))
+
+    const pastaScheduleOfDay1 = pastaSchduleDict.get(1)
+    if (typeof pastaScheduleOfDay1 !== "undefined") {
+        dp[1][pastaScheduleOfDay1.pastaType] = [1n, 0n]
+        dp[1][(pastaScheduleOfDay1.pastaType + 1) % 3] = [0n, 0n]
+        dp[1][(pastaScheduleOfDay1.pastaType + 2) % 3] = [0n, 0n]
+    }else{
+        dp[1] = Array.from({length:3}, () => [1n, 0n])
+    }
+
     let ans = 0n
 
     console.log((ans % MOD).toString())
@@ -42,3 +48,5 @@ function solveSyoujin40(inputs:string[]) {
 
 const inputSyoujin40 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
 solveSyoujin40(inputSyoujin40)
+// 参考
+// https://zenn.dev/fjnkt98/articles/685c9a991d4e61
