@@ -1,3 +1,5 @@
+import { sourceMapsEnabled } from "process";
+
 function parseSpaceSeparatedLineToNumberArray(line:string): number[] {
     return line.split(" ").map((char) => {return parseInt(char, 10)})
 }
@@ -7,8 +9,13 @@ function parseFirstNumber(line: string): number {
     return parseInt(line, 10);
 }
 
+function calcSumOfArray<T>(array:Array<T>):T {
+    const sum = array.reduce((accumulator, current) => accumulator + current, 0n);
+    return sum
+}
+
 function solveSyoujin40(inputs:string[]) {
-    function isPastaTypeValue(value: number): value is 1 | 2 | 3 {
+    function isPastaTypeValue(value: number): value is 0 | 1 | 2 {
         const pastaTypeValues = new Set([1,2,3])
         return pastaTypeValues.has(value)
     }
@@ -16,16 +23,17 @@ function solveSyoujin40(inputs:string[]) {
     const MOD = 10000n
     type PastaSchedule = {
         day: number, 
-        pastaType: 1 | 2 | 3
+        pastaType: 0 | 1 | 2
     }
     const [N, K] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const pastaSchduleDict = new Map<number, PastaSchedule>()
     for (let k = 0; k < K+1; k++) {
         const [Ai, Bi] = parseSpaceSeparatedLineToNumberArray(inputs[1+k])
-        if (!isPastaTypeValue(Bi)){
-            throw new Error("Biの値が1 ~ 3以外")
+        const pastaTypeValue = Bi - 1
+        if (!isPastaTypeValue(pastaTypeValue)){
+            throw new Error("Biの値が0 ~ 2以外")
         }
-        pastaSchduleDict.set(Ai, {day:Ai, pastaType: Bi})
+        pastaSchduleDict.set(Ai, {day:Ai, pastaType: pastaTypeValue})
     }
 
     // dp[n][a][b]
@@ -38,6 +46,16 @@ function solveSyoujin40(inputs:string[]) {
         dp[1][(pastaScheduleOfDay1.pastaType + 2) % 3] = [0n, 0n]
     }else{
         dp[1] = Array.from({length:3}, () => [1n, 0n])
+    }
+
+    for (let day = 2; day < N+1; day++) {
+        for (let pastaType = 0; pastaType < 3; pastaType++) {
+            dp[day][pastaType][0] = 
+
+            dp[day][pastaType][1] = dp[day-1][pastaType][0]
+            
+        }
+        
     }
 
     let ans = 0n
