@@ -1,5 +1,3 @@
-import { sourceMapsEnabled } from "process";
-
 function parseSpaceSeparatedLineToNumberArray(line:string): number[] {
     return line.split(" ").map((char) => {return parseInt(char, 10)})
 }
@@ -9,14 +7,23 @@ function parseFirstNumber(line: string): number {
     return parseInt(line, 10);
 }
 
-function calcSumOfArray<T>(array:Array<T>):T {
-    const sum = array.reduce((accumulator, current) => accumulator + current, 0n);
-    return sum
+type Numeric = number | bigint;
+
+function calcSumOfArray<T extends number>(array: T[]): number;
+function calcSumOfArray<T extends bigint>(array: T[]): bigint;
+function calcSumOfArray<T extends Numeric>(array: T[]): Numeric {
+    if (array.length === 0) return 0;
+    
+    const first = array[0];
+    if (typeof first === 'number') {
+        return (array as number[]).reduce((acc, cur) => acc + cur, 0);
+    }
+    return (array as bigint[]).reduce((acc, cur) => acc + cur, 0n);
 }
 
 function solveSyoujin40(inputs:string[]) {
     function isPastaTypeValue(value: number): value is 0 | 1 | 2 {
-        const pastaTypeValues = new Set([1,2,3])
+        const pastaTypeValues = new Set([0,1,2])
         return pastaTypeValues.has(value)
     }
 
@@ -50,15 +57,25 @@ function solveSyoujin40(inputs:string[]) {
 
     for (let day = 2; day < N+1; day++) {
         for (let pastaType = 0; pastaType < 3; pastaType++) {
-            dp[day][pastaType][0] = 
+            dp[day][pastaType][0] = calcSumOfArray(dp[day-1][(pastaType+1)%3]) % MOD + calcSumOfArray(dp[day-1][(pastaType+2)%3]) % MOD
+            dp[day][pastaType][1] = dp[day-1][pastaType][0] % MOD
+             
+        }
 
-            dp[day][pastaType][1] = dp[day-1][pastaType][0]
-            
+        const scheduleOfCurrentDay = pastaSchduleDict.get(day)
+        if (typeof scheduleOfCurrentDay !== "undefined") {
+            dp[day][(scheduleOfCurrentDay.pastaType+1)%3] = [0n,0n]
+            dp[day][(scheduleOfCurrentDay.pastaType+2)%3] = [0n,0n]
+
         }
         
     }
 
     let ans = 0n
+    for (let pastaType = 0; pastaType < 3; pastaType++) {
+        ans += calcSumOfArray(dp[N][pastaType]) % MOD
+        
+    }
 
     console.log((ans % MOD).toString())
 
