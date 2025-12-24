@@ -34,7 +34,7 @@ function solveSyoujin40(inputs:string[]) {
     }
     const [N, K] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const pastaSchduleDict = new Map<number, PastaSchedule>()
-    for (let k = 0; k < K+1; k++) {
+    for (let k = 0; k < K; k++) {
         const [Ai, Bi] = parseSpaceSeparatedLineToNumberArray(inputs[1+k])
         const pastaTypeValue = Bi - 1
         if (!isPastaTypeValue(pastaTypeValue)){
