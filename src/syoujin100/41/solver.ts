@@ -10,14 +10,18 @@ function parseFirstNumber(line: string): number {
 function solveSyoujin41(inputs:string[]) {
     const [D, N] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const templeturesList: number[] = []
-    const clothesParams :[number, number, number][] = []
+    const clothesParams :{minTemperature:number, maxTemperature:number, flashiness:number}[] = []
     for (let lineNumber = 1; lineNumber < 1+D; lineNumber++) {
         const Ti = parseFirstNumber(inputs[lineNumber])
         templeturesList.push(Ti)
     }
     for (let lineNumber = 1+D; lineNumber < 1+D+N; lineNumber++) {
         const [Ai, Bi, Ci] = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
-        clothesParams.push([Ai, Bi, Ci])
+        clothesParams.push({
+            minTemperature:Ai,
+            maxTemperature:Bi,
+            flashiness:Ci
+        })
     }
 
 }
