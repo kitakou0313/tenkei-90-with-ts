@@ -24,6 +24,15 @@ function solveSyoujin41(inputs:string[]) {
         })
     }
 
+    const dp: number[][] = []
+
+    let maxScore = Number.MIN_SAFE_INTEGER
+    for (let clothesNumber = 0; clothesNumber < N; clothesNumber++) {
+        maxScore = Math.max(maxScore, dp[D][clothesNumber])
+    }
+
+    console.log(maxScore)
+
 }
 
 const inputSyoujin41 = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
