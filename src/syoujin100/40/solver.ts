@@ -22,7 +22,7 @@ function calcSumOfArray<T extends Numeric>(array: T[]): Numeric {
 }
 
 function solveSyoujin40(inputs:string[]) {
-    function isPastaTypeValue(value: number): value is 0 | 1 | 2 {
+    function isPastaTypeValue(value: number): value is 1 | 2 | 3 {
         const pastaTypeValues = new Set([0,1,2])
         return pastaTypeValues.has(value)
     }
@@ -30,7 +30,7 @@ function solveSyoujin40(inputs:string[]) {
     const MOD = 10000n
     type PastaSchedule = {
         day: number, 
-        pastaType: 0 | 1 | 2
+        pastaType: 1 | 2 | 3
     }
     const [N, K] = parseSpaceSeparatedLineToNumberArray(inputs[0])
     const pastaSchduleDict = new Map<number, PastaSchedule>()
@@ -44,15 +44,15 @@ function solveSyoujin40(inputs:string[]) {
     }
 
     // dp[n][a][b]
-    const dp: bigint[][][] = Array.from({length:N+1},() => Array.from({length:3}, () => Array.from({length:2}, () => 0n)))
+    const dp: bigint[][][] = Array.from({length:N+1},() => Array.from({length:4}, () => Array.from({length:3}, () => 0n)))
 
     const pastaScheduleOfDay1 = pastaSchduleDict.get(1)
     if (typeof pastaScheduleOfDay1 !== "undefined") {
-        dp[1][pastaScheduleOfDay1.pastaType] = [1n, 0n]
-        dp[1][(pastaScheduleOfDay1.pastaType + 1) % 3] = [0n, 0n]
-        dp[1][(pastaScheduleOfDay1.pastaType + 2) % 3] = [0n, 0n]
+        dp[1][pastaScheduleOfDay1.pastaType][1] = 0n
     }else{
-        dp[1] = Array.from({length:3}, () => [1n, 0n])
+        for (let pastaType = 1; pastaType < 4; pastaType++) {
+            dp[1][pastaType][1] = 1n
+        }
     }
 
     for (let day = 2; day < N+1; day++) {
