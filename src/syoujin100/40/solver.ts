@@ -61,18 +61,32 @@ function solveSyoujin40(inputs:string[]) {
         for (let pastaType = 1; pastaType < 4; pastaType++) {
             // 前日と違うパスタを食べるケース
             if (pastaType == 1) {
-                dp[day][pastaType][0] = dp[day-1][2][0] + dp[day-1][2][1] + dp[day-1][3][0] + dp[day-1][3][1]
+                dp[day][pastaType][0] = (((dp[day-1][2][0] + dp[day-1][2][1]) % MOD + dp[day-1][3][0]) % MOD + dp[day-1][3][1]) % MOD
             }
             if (pastaType == 2) {
-                dp[day][pastaType][0] = dp[day-1][1][0] + dp[day-1][1][1] + dp[day-1][3][0] + dp[day-1][3][1]
+                dp[day][pastaType][0] = (((dp[day-1][1][0] + dp[day-1][1][1]) % MOD + dp[day-1][3][0]) % MOD + dp[day-1][3][1]) % MOD
             }
             if (pastaType == 3) {
-                dp[day][pastaType][0] = dp[day-1][1][0] + dp[day-1][1][1] + dp[day-1][2][0] + dp[day-1][2][1]
+                dp[day][pastaType][0] = (((dp[day-1][1][0] + dp[day-1][1][1]) % MOD + dp[day-1][2][0]) % MOD + dp[day-1][2][1]) % MOD
             }
 
             // 前日と同じパスタを食べるケース
             // 3日連続で選べないので、前日は異なるパスタである必要がある
             dp[day][pastaType][1] += dp[day-1][pastaType][0]
+        }
+
+        // 献立が決まっていたケース
+        // 決まっていたパスタ以外は全て0にする
+        const pastaScheduleOnThisDay = pastaSchduleDict.get(day)
+        if (typeof pastaScheduleOnThisDay === "undefined") {
+            continue
+        }
+
+        for (let pastaType = 1; pastaType < 4; pastaType++) {
+            if (pastaType === pastaScheduleOnThisDay.pastaType) {
+                continue
+            }
+            dp[day][pastaType] = [0n, 0n]
         }
     }
 
