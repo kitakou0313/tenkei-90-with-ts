@@ -23,7 +23,7 @@ function calcSumOfArray<T extends Numeric>(array: T[]): Numeric {
 
 function solveSyoujin40(inputs:string[]) {
     function isPastaTypeValue(value: number): value is 1 | 2 | 3 {
-        const pastaTypeValues = new Set([0,1,2])
+        const pastaTypeValues = new Set([1,2,3])
         return pastaTypeValues.has(value)
     }
 
@@ -36,43 +36,48 @@ function solveSyoujin40(inputs:string[]) {
     const pastaSchduleDict = new Map<number, PastaSchedule>()
     for (let k = 0; k < K; k++) {
         const [Ai, Bi] = parseSpaceSeparatedLineToNumberArray(inputs[1+k])
-        const pastaTypeValue = Bi - 1
+        const pastaTypeValue = Bi
         if (!isPastaTypeValue(pastaTypeValue)){
-            throw new Error("Biの値が0 ~ 2以外")
+            throw new Error("Biの値が1 ~ 3以外")
         }
         pastaSchduleDict.set(Ai, {day:Ai, pastaType: pastaTypeValue})
     }
 
     // dp[n][a][b]
-    const dp: bigint[][][] = Array.from({length:N+1},() => Array.from({length:4}, () => Array.from({length:3}, () => 0n)))
+    // N日目にパスタaを食べる時の可能な献立の数（b...0のとき前日と違うパスタ、1の時前日と同じパスタ）
+    const dp: bigint[][][] = Array.from({length:N+1},() => Array.from({length:4}, () => Array.from({length:2}, () => 0n)))
 
+    // 献立が決まっている日に初日が含まれるかどうかで分岐
     const pastaScheduleOfDay1 = pastaSchduleDict.get(1)
     if (typeof pastaScheduleOfDay1 !== "undefined") {
-        dp[1][pastaScheduleOfDay1.pastaType][1] = 0n
+        dp[1][pastaScheduleOfDay1.pastaType][0] = 0n
     }else{
         for (let pastaType = 1; pastaType < 4; pastaType++) {
-            dp[1][pastaType][1] = 1n
+            dp[1][pastaType][0] = 1n
         }
     }
 
     for (let day = 2; day < N+1; day++) {
-        for (let pastaType = 0; pastaType < 3; pastaType++) {
-            dp[day][pastaType][0] = calcSumOfArray(dp[day-1][(pastaType+1)%3]) % MOD + calcSumOfArray(dp[day-1][(pastaType+2)%3]) % MOD
-            dp[day][pastaType][1] = dp[day-1][pastaType][0] % MOD
-             
-        }
+        for (let pastaType = 1; pastaType < 4; pastaType++) {
+            // 前日と違うパスタを食べるケース
+            if (pastaType == 1) {
+                dp[day][pastaType][0] = dp[day-1][2][0] + dp[day-1][2][1] + dp[day-1][3][0] + dp[day-1][3][1]
+            }
+            if (pastaType == 2) {
+                dp[day][pastaType][0] = dp[day-1][1][0] + dp[day-1][1][1] + dp[day-1][3][0] + dp[day-1][3][1]
+            }
+            if (pastaType == 3) {
+                dp[day][pastaType][0] = dp[day-1][1][0] + dp[day-1][1][1] + dp[day-1][2][0] + dp[day-1][2][1]
+            }
 
-        const scheduleOfCurrentDay = pastaSchduleDict.get(day)
-        if (typeof scheduleOfCurrentDay !== "undefined") {
-            dp[day][(scheduleOfCurrentDay.pastaType+1)%3] = [0n,0n]
-            dp[day][(scheduleOfCurrentDay.pastaType+2)%3] = [0n,0n]
-
+            // 前日と同じパスタを食べるケース
+            // 3日連続で選べないので、前日は異なるパスタである必要がある
+            dp[day][pastaType][1] += dp[day-1][pastaType][0]
         }
-        
     }
 
     let ans = 0n
-    for (let pastaType = 0; pastaType < 3; pastaType++) {
+    for (let pastaType = 1; pastaType < 4; pastaType++) {
         ans += calcSumOfArray(dp[N][pastaType]) % MOD
         
     }
