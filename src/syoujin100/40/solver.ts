@@ -50,7 +50,7 @@ function solveSyoujin40(inputs:string[]) {
     // 献立が決まっている日に初日が含まれるかどうかで分岐
     const pastaScheduleOfDay1 = pastaSchduleDict.get(1)
     if (typeof pastaScheduleOfDay1 !== "undefined") {
-        dp[1][pastaScheduleOfDay1.pastaType][0] = 0n
+        dp[1][pastaScheduleOfDay1.pastaType][0] = 1n
     }else{
         for (let pastaType = 1; pastaType < 4; pastaType++) {
             dp[1][pastaType][0] = 1n
