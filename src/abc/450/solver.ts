@@ -7,40 +7,55 @@ function parseFirstNumber(line: string): number {
     return parseInt(line, 10);
 }
 
-function searchAns(Cij:number[][], N:number):string {
-    for (let a = 0; a < N-1; a++) {
-        for (let c = a+1; c < N; c++) {
-            const costAtoC = Cij[a][c]
-            for (let b = a+1; b < c; b++) {
-                const costAtoBtoC = Cij[a][b] + Cij[b][c]
-                if (costAtoBtoC < costAtoC) {
-                    return "Yes"
-                }
+function convertCoordinateToString(h:number, w:number): string {
+    return `${h}-${w}`
+}
+
+function markCoordinateAsDomainWithDFS(h:number, w:number) {
+    
+}
+
+function solveABC450c(inputs:string[]) {
+    const [H, W] = parseSpaceSeparatedLineToNumberArray(inputs[0])
+    const grid: string[][] = []
+
+    for (let lineNumber = 1; lineNumber < 1+H; lineNumber++) {
+        const row = inputs[lineNumber]
+        grid.push(row.split(""))
+    }
+
+    // DFSで領域を抽出
+    const visitted = new Set<string>()
+    const domains: Set<string>[] = []
+
+    for (let h = 0; h < H; h++) {
+        for (let w = 0; w < W; w++) {
+            const coordinateString = convertCoordinateToString(h, w)
+            
+            if (visitted.has(coordinateString)) {
+                continue
+            }
+
+            // 白マスだったら領域として探索+記録する
+            if (grid[h][w] === '.') {
+                markCoordinateAsDomainWithDFS(h, w)
             }
         }
     }
 
-    return "No"
-}
-
-function solveABC450b(inputs:string[]) {
-    const N = parseFirstNumber(inputs[0])
-    const Cij: number[][] = []
-
-    for (let lineNumber = 1; lineNumber < 1+N-1; lineNumber++) {
-        const cij = parseSpaceSeparatedLineToNumberArray(inputs[lineNumber])
-        const tmp0Array: number[] = []
-        for (let i = 0; i < lineNumber; i++) {
-            tmp0Array.push(0)
+    // 各領域ごと、中にエッジを含まないかを確認
+    // エッジを含まなければカウント
+    let countOfDomainsNotHavingEdge = 0
+    for (const domain of domains) {
+        for (const coordinate of domain) {
+            
         }
-        const extendedcij = tmp0Array.concat(cij)
-        Cij.push(extendedcij)
     }
 
-    // a, b, cを全通り試してバリデーションでもよかった
-    console.log(searchAns(Cij, N))
+    // エッジを含まない領域の数を出力
+    console.log(countOfDomainsNotHavingEdge)
 
 }
 
-const inputABC450b = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
-solveABC450b(inputABC450b)
+const inputABC450c = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\n');
+solveABC450c(inputABC450c)
