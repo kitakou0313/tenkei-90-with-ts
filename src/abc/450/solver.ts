@@ -11,8 +11,37 @@ function convertCoordinateToString(h:number, w:number): string {
     return `${h}-${w}`
 }
 
-function markCoordinateAsDomainWithDFS(h:number, w:number) {
-    
+function convertStringToCoodinate(coordinateString:string): [number, number] {
+    const [hString, wString] = coordinateString.split("-")
+    return [parseInt(hString, 10), parseInt(wString, 10)]
+}
+
+// 呼び出されたマスをdomainに含める
+function markCoordinateAsDomainWithDFS(h:number, w:number, H:number, W:number, domain:Set<string>, visitted:Set<string>, grid: string[][]) {
+    visitted.add(convertCoordinateToString(h, w))
+    domain.add(convertCoordinateToString(h, w))
+
+    // 0 ~ H, 0 ~ W以内 かつ 白マス　かつ visittedにないとき遷移   
+    const dhList = [ 0, 0, 1,-1]
+    const dwList = [ 1,-1, 0, 0]
+
+    for (let dIndex = 0; dIndex < 4; dIndex++) {
+        const nexth = h+dhList[dIndex]
+        const nextw = w+dwList[dIndex]
+
+        if (!(0 <= nexth && nexth <= H-1 && 0 <= nextw && nextw <= W-1)) {
+            continue
+        }
+        if (!(grid[nexth][nextw] === ".")) {
+            continue
+        }
+        if ((visitted.has(convertCoordinateToString(nexth, nextw)))) {
+            continue
+        }
+
+        markCoordinateAsDomainWithDFS(nexth, nextw, H, W, domain, visitted, grid)
+    }
+
 }
 
 function solveABC450c(inputs:string[]) {
@@ -38,7 +67,9 @@ function solveABC450c(inputs:string[]) {
 
             // 白マスだったら領域として探索+記録する
             if (grid[h][w] === '.') {
-                markCoordinateAsDomainWithDFS(h, w)
+                const domain = new Set<string>()
+                markCoordinateAsDomainWithDFS(h, w, H, W, domain, visitted, grid)
+                domains.push(domain)
             }
         }
     }
@@ -47,9 +78,16 @@ function solveABC450c(inputs:string[]) {
     // エッジを含まなければカウント
     let countOfDomainsNotHavingEdge = 0
     for (const domain of domains) {
+        let isThisDomainNotHavingEdge = true
         for (const coordinate of domain) {
-            
+            const [h, w] = convertStringToCoodinate(coordinate)
+            if (h == 0 || h == H-1 || w == 0 || w == W-1) {
+                isThisDomainNotHavingEdge = false
+            }
         }
+
+        countOfDomainsNotHavingEdge += isThisDomainNotHavingEdge ? 1 : 0
+
     }
 
     // エッジを含まない領域の数を出力
