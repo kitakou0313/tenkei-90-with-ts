@@ -19,6 +19,18 @@
 (0,0)(0,1)(0,2)
 
 ## メモ
+- TLEしたのでパフォチューする
+    - CPU Profilingを取得 -> 改善
+- Node.jsアプリケーションのCPU Profileの取り方
+    - `node --cpu-prof src/abc/450/solver.js`
+    - `chrome://inspect` -> `Open dedicated DevTools for Node` 
+    - `Performance`タブ -> 上矢印のボタンから読み込み
+- もっとサイズの大きい入力にしないと正確なProfilingができなさそう
+- Flame graphの表示が他の言語と違う？
+    - 他のProfilerの表示
+        - 横軸->サンプル数
+    - Dev toolのProfiler
+        - 横軸->実行タイムライン
 
 ## ToDo
 
