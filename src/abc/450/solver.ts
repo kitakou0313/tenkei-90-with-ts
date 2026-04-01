@@ -7,6 +7,9 @@ function parseFirstNumber(line: string): number {
     return parseInt(line, 10);
 }
 
+// CoorinateSet
+// 座標の有無を文字列への変換で判定できるクラス
+
 function convertCoordinateToString(h:number, w:number): string {
     return `${h}-${w}`
 }
