@@ -8,21 +8,45 @@ function parseFirstNumber(line: string): number {
 }
 
 // CoorinateSet
-// 座標の有無を文字列への変換で判定できるクラス
+// 座標の有無を文字列への変換なしで判定できるクラス
+class CoorinateSet {
+    coodinates: Map<number, Set<number>> = new Map()
 
-function convertCoordinateToString(h:number, w:number): string {
-    return `${h}-${w}`
-}
+    add(h:number, w:number) {
+        if (!this.coodinates.has(h)) {
+            this.coodinates.set(h, new Set())
+        }
+        this.coodinates.get(h)?.add(w)
+    }
 
-function convertStringToCoodinate(coordinateString:string): [number, number] {
-    const [hString, wString] = coordinateString.split("-")
-    return [parseInt(hString, 10), parseInt(wString, 10)]
+    has(h:number, w:number):boolean{
+        const wValuesRelatedToh = this.coodinates.get(h)
+
+        if (typeof wValuesRelatedToh === "undefined") {
+            return false
+        }
+
+        return wValuesRelatedToh.has(w)
+    }
+
+    listAllCoordinates():[number, number][] {
+        const allCoodinatesList: [number, number][] = []
+
+        for (const entry of this.coodinates.entries()) {
+            for (const wValue of entry[1]) {
+                allCoodinatesList.push([entry[0], wValue])
+            }
+        }
+
+        return allCoodinatesList
+    }
 }
 
 // 呼び出されたマスをdomainに含める
-function markCoordinateAsDomainWithDFS(h:number, w:number, H:number, W:number, domain:Set<string>, visitted:Set<string>, grid: string[][]) {
-    visitted.add(convertCoordinateToString(h, w))
-    domain.add(convertCoordinateToString(h, w))
+function markCoordinateAsDomainWithDFS(h:number, w:number, H:number, W:number, domain:CoorinateSet, visitted:CoorinateSet, grid: string[][]) {
+    
+    visitted.add(h, w)
+    domain.add(h, w)
 
     // 0 ~ H, 0 ~ W以内 かつ 白マス　かつ visittedにないとき遷移   
     const dhList = [ 0, 0, 1,-1]
@@ -38,7 +62,7 @@ function markCoordinateAsDomainWithDFS(h:number, w:number, H:number, W:number, d
         if (!(grid[nexth][nextw] === ".")) {
             continue
         }
-        if ((visitted.has(convertCoordinateToString(nexth, nextw)))) {
+        if ((visitted.has(nexth, nextw))) {
             continue
         }
 
@@ -57,20 +81,19 @@ function solveABC450c(inputs:string[]) {
     }
 
     // DFSで領域を抽出
-    const visitted = new Set<string>()
-    const domains: Set<string>[] = []
+    const visitted = new CoorinateSet()
+    const domains: CoorinateSet[] = []
 
     for (let h = 0; h < H; h++) {
         for (let w = 0; w < W; w++) {
-            const coordinateString = convertCoordinateToString(h, w)
             
-            if (visitted.has(coordinateString)) {
+            if (visitted.has(h, w)) {
                 continue
             }
 
             // 白マスだったら領域として探索+記録する
             if (grid[h][w] === '.') {
-                const domain = new Set<string>()
+                const domain = new CoorinateSet()
                 markCoordinateAsDomainWithDFS(h, w, H, W, domain, visitted, grid)
                 domains.push(domain)
             }
@@ -82,10 +105,11 @@ function solveABC450c(inputs:string[]) {
     let countOfDomainsNotHavingEdge = 0
     for (const domain of domains) {
         let isThisDomainNotHavingEdge = true
-        for (const coordinate of domain) {
-            const [h, w] = convertStringToCoodinate(coordinate)
+        for (const coordinate of domain.listAllCoordinates()) {
+            const [h, w] = coordinate
             if (h == 0 || h == H-1 || w == 0 || w == W-1) {
                 isThisDomainNotHavingEdge = false
+                break
             }
         }
 

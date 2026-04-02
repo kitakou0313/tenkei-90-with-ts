@@ -34,6 +34,11 @@
         - 横軸->実行タイムライン
 
 ## ToDo
-- 制約マックスの入力を作ってProfileとる
+- 文字列に変換してSetにする実装よりmapとSetで扱う方が早かった　なぜ？
+    - 文字列変換の方
+        - src/abc/450/with-string-set.cpuprofile
+    - mapとsetの方
+        - src/abc/450/with-map-and-set.cpuprofile
+    - 文字列変換のどこにそんなに時間がかかるのかを知りたい
 
 ## 解説
